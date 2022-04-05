@@ -1,0 +1,9 @@
+eu-2005_degree V1 build index: 8605.6 s
+
+eu-2005_degree V2 build index: 8692.6 s
+
+10000
+35000
+
+35000
+630000

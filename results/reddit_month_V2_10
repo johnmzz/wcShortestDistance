@@ -1,0 +1,68 @@
+the number of vertices: 35776
+the number of edges: 124330
+the number of weights: 41
+the maximum weight value: 40
+use V2 for first 10% vertices..., which is 3577
+0 vertices finished!
+this round took 0.042469 s
+2000 vertices finished!
+this round took 16.7165 s
+4000 vertices finished!
+this round took 16.96 s
+6000 vertices finished!
+this round took 16.9765 s
+8000 vertices finished!
+this round took 16.9831 s
+10000 vertices finished!
+this round took 16.9871 s
+12000 vertices finished!
+this round took 16.9902 s
+14000 vertices finished!
+this round took 16.9926 s
+16000 vertices finished!
+this round took 16.9949 s
+18000 vertices finished!
+this round took 16.9969 s
+20000 vertices finished!
+this round took 16.9989 s
+22000 vertices finished!
+this round took 17.001 s
+24000 vertices finished!
+this round took 17.003 s
+26000 vertices finished!
+this round took 17.0048 s
+28000 vertices finished!
+this round took 17.0064 s
+30000 vertices finished!
+this round took 17.0079 s
+32000 vertices finished!
+this round took 17.0095 s
+34000 vertices finished!
+this round took 17.0112 s
+build index: 17.0126 s
+--------------Details of Index Occupation-------------
+labeling v, offset, labeling d, labeling w: 3360702, 3396478, 4474431, 4474431
+total number of unsigned ints in the index: 15706042
+	Command being timed: "timeout 30h ./wcsd reddit_month_degree V2 10 1"
+	User time (seconds): 16.99
+	System time (seconds): 0.07
+	Percent of CPU this job got: 99%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:17.10
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 117140
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 29107
+	Voluntary context switches: 7
+	Involuntary context switches: 26
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 8
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

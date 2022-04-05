@@ -1,0 +1,35 @@
+the number of vertices: 1139905
+the number of edges: 56375711
+the number of weights: 3
+the maximum weight value: 3
+use V4 for first 10% vertices..., which is 113990
+0 vertices finished!
+this round took 2.23722 s
+2000 vertices finished!
+this round took 31070.7 s
+4000 vertices finished!
+this round took 83206 s
+Command exited with non-zero status 124
+	Command being timed: "timeout 30h ./wcsd_3_24 hollywood_degree V4 10 1"
+	User time (seconds): 107944.26
+	System time (seconds): 45.80
+	Percent of CPU this job got: 99%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 30:00:03
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 48971448
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 12256267
+	Voluntary context switches: 106325
+	Involuntary context switches: 1088426
+	Swaps: 0
+	File system inputs: 1770928
+	File system outputs: 24
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 124

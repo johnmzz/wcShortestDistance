@@ -1,0 +1,35 @@
+the number of vertices: 1632803
+the number of edges: 22301964
+the number of weights: 8
+the maximum weight value: 7
+use V4 for first 5% vertices..., which is 81640
+0 vertices finished!
+this round took 3.06015 s
+2000 vertices finished!
+this round took 27392.4 s
+4000 vertices finished!
+this round took 86384.9 s
+Command exited with non-zero status 124
+	Command being timed: "timeout 30h ./wcsd pokec_degree V4 5 1"
+	User time (seconds): 107882.05
+	System time (seconds): 108.55
+	Percent of CPU this job got: 99%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 30:00:03
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 76828192
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 61099
+	Minor (reclaiming a frame) page faults: 62844878
+	Voluntary context switches: 61107
+	Involuntary context switches: 143917
+	Swaps: 0
+	File system inputs: 727520
+	File system outputs: 24
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 124

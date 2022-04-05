@@ -1,0 +1,114 @@
+the number of vertices: 80555
+the number of edges: 10000054
+the number of weights: 6
+the maximum weight value: 5
+use V4 for first 10% vertices..., which is 8055
+0 vertices finished!
+this round took 0.156614 s
+2000 vertices finished!
+this round took 339.123 s
+4000 vertices finished!
+this round took 552.758 s
+6000 vertices finished!
+this round took 639.274 s
+8000 vertices finished!
+this round took 675.852 s
+10000 vertices finished!
+this round took 700.214 s
+12000 vertices finished!
+this round took 710.982 s
+14000 vertices finished!
+this round took 716.557 s
+16000 vertices finished!
+this round took 719.513 s
+18000 vertices finished!
+this round took 721.418 s
+20000 vertices finished!
+this round took 722.45 s
+22000 vertices finished!
+this round took 723.104 s
+24000 vertices finished!
+this round took 723.522 s
+26000 vertices finished!
+this round took 723.829 s
+28000 vertices finished!
+this round took 724.023 s
+30000 vertices finished!
+this round took 724.147 s
+32000 vertices finished!
+this round took 724.237 s
+34000 vertices finished!
+this round took 724.302 s
+36000 vertices finished!
+this round took 724.364 s
+38000 vertices finished!
+this round took 724.409 s
+40000 vertices finished!
+this round took 724.44 s
+42000 vertices finished!
+this round took 724.461 s
+44000 vertices finished!
+this round took 724.479 s
+46000 vertices finished!
+this round took 724.495 s
+48000 vertices finished!
+this round took 724.508 s
+50000 vertices finished!
+this round took 724.517 s
+52000 vertices finished!
+this round took 724.526 s
+54000 vertices finished!
+this round took 724.534 s
+56000 vertices finished!
+this round took 724.54 s
+58000 vertices finished!
+this round took 724.545 s
+60000 vertices finished!
+this round took 724.55 s
+62000 vertices finished!
+this round took 724.555 s
+64000 vertices finished!
+this round took 724.559 s
+66000 vertices finished!
+this round took 724.562 s
+68000 vertices finished!
+this round took 724.566 s
+70000 vertices finished!
+this round took 724.569 s
+72000 vertices finished!
+this round took 724.572 s
+74000 vertices finished!
+this round took 724.575 s
+76000 vertices finished!
+this round took 724.578 s
+78000 vertices finished!
+this round took 724.581 s
+80000 vertices finished!
+this round took 724.587 s
+build index: 724.589 s
+--------------Details of Index Occupation-------------
+labeling v, offset, labeling d, labeling w: 24912396, 24992951, 25290279, 25290279
+total number of unsigned ints in the index: 100485905
+	Command being timed: "timeout 10h ./wcsd movielens_10m_degree V4 10"
+	User time (seconds): 724.38
+	System time (seconds): 0.48
+	Percent of CPU this job got: 99%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 12:04.99
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 761148
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 190558
+	Voluntary context switches: 9
+	Involuntary context switches: 784
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 72
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
