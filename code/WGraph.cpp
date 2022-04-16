@@ -940,6 +940,25 @@ void WGraph::build_index(string type, int threshold) {
             }
         }
     }
+    else if (type == "V6") {
+        tree_decomposition();
+        cout << "use V6 for first " << threshold << "\% vertices..." << ", which is " << (int)(nsize*threshold/100) << endl;
+        for (uint32_t u = 0; u < nsize; u++) {
+            if (u < (int)(nsize*threshold/100)) {
+                uint32_t u_ = v_degree[nsize-1-u].first;
+                vertex_prioritized_indexing_V4(u, updated, visited_r, this_visited_flag);
+            }
+            else {
+                uint32_t u_ = v_degree[nsize-1-u].first;
+                vertex_prioritized_indexing_plus(u, updated, visited_r, this_visited_flag);
+            }
+            if (u % 2000 == 0) {
+                cout << u << " vertices finished!" << endl;
+                clock_t temp = clock();
+                cout << "this round took " << (float)(temp - start) / CLOCKS_PER_SEC << " s" << endl;
+            }
+        }
+    }
     else if (type == "PLL") {
         for (uint32_t u = 0; u < nsize; u++) {
             pruned_landmark_labeling(u, visited_d);
@@ -1879,4 +1898,225 @@ void WGraph::preprocess(int num_intervals) {
         cout << endl;
     }
     */
+}
+
+void WGraph::print_hgraph() {
+    cout << "h_graph = " << endl;
+    for (uint32_t i = 0; i < hgraph.size(); i++) {
+        cout << i << ": [";
+        for (auto j : hgraph[i]) {
+            cout << j << ",";
+        }
+        cout << "]" << endl;
+    }
+}
+
+void WGraph::print_vdegree() {
+    cout << "v_degree = " << endl;
+    for (uint32_t i = 0; i < v_degree.size(); i++) {
+        cout << i << ": " << "(" << v_degree[i].first << "," << v_degree[i].second << ")" << endl;
+    }
+}
+
+void WGraph::print_vindex() {
+    cout << "index = [";
+    for (auto i : v_index) {
+        cout << i << ",";
+    }
+    cout << "]" << endl;
+}
+
+void WGraph::print_beg_end() {
+    cout << "beg = [";
+    for (auto i : beg) {
+        cout << i << ",";
+    }
+    cout << "]" << endl;
+
+    cout << "end = [";
+    for (auto i : end) {
+        cout << i << ",";
+    }
+    cout << "]" << endl;
+}
+
+void WGraph::print_decomp_order() {
+    cout << "order = [";
+    for (auto i : decomp_order) {
+        cout << i << ",";
+    }
+    cout << "]" << endl;
+}
+
+void WGraph::tree_decomposition() {
+    // *********** copy graph ************
+    for (uint32_t i = 0; i < graph.size(); i++) {
+        set<uint32_t> s(graph[i].begin(), graph[i].end());
+        hgraph.push_back(s);
+    }
+    // print_hgraph();
+
+    // ************ initialize degree and sort ************
+    for (uint32_t i = 0; i < nsize; i++) {
+        // cout << i << ": " << ndegree[i] << endl;
+        pair<uint32_t, uint32_t> p(i, ndegree[i]);
+        v_degree.push_back(p);
+    }
+    // print_vdegree();
+    sort(v_degree.begin(), v_degree.end(), [](auto &left, auto &right) { return left.second < right.second; });
+    // print_vdegree();
+
+    // ************ initialize index to degree ************
+    v_index = vector<uint32_t>(nsize);
+    for (int i = 0; i < nsize; i++) {
+        v_index[v_degree[i].first] = i;
+    }
+    // print_vindex();
+
+    // ************ initialize begin/end ************
+    beg = vector<uint32_t>(nsize, INF);
+    end = vector<uint32_t>(nsize, INF);
+    for (uint32_t i = 0; i < nsize; i++) {
+        if (i == 0 || v_degree[i-1].second != v_degree[i].second) {
+            beg[v_degree[i].second] = i;
+        }
+        if (i == (nsize-1) || v_degree[i+1].second != v_degree[i].second) {
+            end[v_degree[i].second] = i;
+        }
+    }
+    // print_beg_end();
+
+    // ************ start decomposition ************
+    cout << "Start tree decomposition..." << endl;
+    for (uint32_t i = 0; i < nsize; i++) {
+        uint32_t u = v_degree[i].first;
+
+        for (auto v = hgraph[u].begin(); v != hgraph[u].end(); v++) {
+            for (auto w = hgraph[u].begin(); w != hgraph[u].end(); w++) {
+                if ((*v != *w) && (*v < *w)) {
+                    // cout << *v << "," << *w << endl;
+                    hgraph[*v].insert(*w);
+                    hgraph[*w].insert(*v);
+                }
+            }
+        }
+
+        for (auto v : hgraph[u]) {
+            hgraph[v].erase(u);
+            uint32_t idx = v_index[v];
+            uint32_t old = v_degree[idx].second;
+            uint32_t new_ = hgraph[v].size();
+
+            if (new_ < old) {
+                uint32_t pos = max(i+1, beg[old]);
+
+                v_degree[idx] = v_degree[pos];
+                v_index[v_degree[pos].first] = idx;
+
+                v_degree[pos] = pair<uint32_t, uint32_t>(v, new_);
+                v_index[v] = pos;
+
+                beg[old] = pos + 1;
+                if (beg[old] > end[old]) {
+                    beg[old] = INF;
+                    end[old] = INF;
+                }
+
+                if (end[new_] == INF) {
+                    beg[new_] = pos;
+                    end[new_] = pos;
+                } else {
+                    end[new_] = pos;
+                }
+            }
+            else if (new_ > old) {
+                for (uint32_t j = old; j < new_; j++) {
+                    uint32_t pos = end[j];
+
+                    v_degree[idx] = v_degree[pos];
+                    v_index[v_degree[pos].first] = idx;
+
+                    v_degree[pos] = pair<uint32_t, uint32_t>(v, j+1);
+                    v_index[v] = pos;
+
+                    end[j] = pos - 1;
+                    if (end[j] < beg[j]) {
+                        beg[j] = INF;
+                        end[j] = INF;
+                    }
+
+                    if (beg[j+1] == INF) {
+                        beg[j+1] = pos;
+                        end[j+1] = pos;
+                    } else {
+                        beg[j+1] = pos;
+                    }
+
+                    idx = v_index[v];
+                }
+            }
+        }
+    }
+
+    // ************ Finished decomposition ************
+    // cout << "Finished decomposition, result: " << endl;
+    // print_vdegree();
+}
+
+void WGraph::tree_decomposition_2() {
+    // *********** copy graph ************
+    for (uint32_t i = 0; i < graph.size(); i++) {
+        set<uint32_t> s(graph[i].begin(), graph[i].end());
+        hgraph.push_back(s);
+    }
+    //print_hgraph();
+
+    // ************ initialize degree and sort ************
+    for (uint32_t i = 0; i < nsize; i++) {
+        // cout << i << ": " << ndegree[i] << endl;
+        pair<uint32_t, uint32_t> p(i, ndegree[i]);
+        v_degree.push_back(p);
+    }
+    // print_vdegree();
+    sort(v_degree.begin(), v_degree.end(), [](auto &left, auto &right) { return left.second < right.second; });
+    //print_vdegree();
+
+    // ************ initialize index to degree ************
+    v_index = vector<uint32_t>(nsize);
+    for (int i = 0; i < nsize; i++) {
+        v_index[v_degree[i].first] = i;
+    }
+    //print_vindex();
+
+    // ************ start decomposition ************
+    cout << "Start tree decomposition..." << endl;
+    for (uint32_t i = 0; i < nsize; i++) {
+        uint32_t u = v_degree[0].first;
+
+        for (auto v = hgraph[u].begin(); v != hgraph[u].end(); v++) {
+            for (auto w = hgraph[u].begin(); w != hgraph[u].end(); w++) {
+                if ((*v != *w) && (*v < *w)) {
+                    // cout << *v << "," << *w << endl;
+                    hgraph[*v].insert(*w);
+                    hgraph[*w].insert(*v);
+                }
+            }
+        }
+
+        for (auto v : hgraph[u]) {
+            hgraph[v].erase(u);
+            v_degree[v].second = hgraph[v].size();
+        }
+
+        decomp_order.push_back(u);
+        v_degree.erase(v_degree.begin());
+        sort(v_degree.begin(), v_degree.end(), [](auto &left, auto &right) { return left.second < right.second; });
+
+        for (int j = 0; j < v_degree.size(); j++) {
+            v_index[v_degree[j].first] = j;
+        }
+    }
+
+    // ************ Finished decomposition ************
+    print_decomp_order();
 }

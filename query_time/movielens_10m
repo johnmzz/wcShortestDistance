@@ -1,0 +1,96 @@
+vldb % ./wcsd movielens_10m_degree V2 10 1
+the number of vertices: 80555
+the number of edges: 10000054
+the number of weights: 6
+the maximum weight value: 5
+use V2 for first 10% vertices..., which is 8055
+0 vertices finished!
+this round took 0.191557 s
+2000 vertices finished!
+this round took 726.735 s
+4000 vertices finished!
+this round took 1145.02 s
+6000 vertices finished!
+this round took 1283.65 s
+8000 vertices finished!
+this round took 1340.3 s
+10000 vertices finished!
+this round took 1372.97 s
+12000 vertices finished!
+this round took 1386.35 s
+14000 vertices finished!
+this round took 1393.85 s
+16000 vertices finished!
+this round took 1397.43 s
+18000 vertices finished!
+this round took 1399.58 s
+20000 vertices finished!
+this round took 1400.74 s
+22000 vertices finished!
+this round took 1401.49 s
+24000 vertices finished!
+this round took 1401.97 s
+26000 vertices finished!
+this round took 1402.32 s
+28000 vertices finished!
+this round took 1402.54 s
+30000 vertices finished!
+this round took 1402.69 s
+32000 vertices finished!
+this round took 1402.79 s
+34000 vertices finished!
+this round took 1402.86 s
+36000 vertices finished!
+this round took 1402.92 s
+38000 vertices finished!
+this round took 1402.97 s
+40000 vertices finished!
+this round took 1403.01 s
+42000 vertices finished!
+this round took 1403.03 s
+44000 vertices finished!
+this round took 1403.05 s
+46000 vertices finished!
+this round took 1403.06 s
+48000 vertices finished!
+this round took 1403.08 s
+50000 vertices finished!
+this round took 1403.09 s
+52000 vertices finished!
+this round took 1403.1 s
+54000 vertices finished!
+this round took 1403.1 s
+56000 vertices finished!
+this round took 1403.11 s
+58000 vertices finished!
+this round took 1403.12 s
+60000 vertices finished!
+this round took 1403.12 s
+62000 vertices finished!
+this round took 1403.13 s
+64000 vertices finished!
+this round took 1403.13 s
+66000 vertices finished!
+this round took 1403.14 s
+68000 vertices finished!
+this round took 1403.14 s
+70000 vertices finished!
+this round took 1403.15 s
+72000 vertices finished!
+this round took 1403.15 s
+74000 vertices finished!
+this round took 1403.15 s
+76000 vertices finished!
+this round took 1403.16 s
+78000 vertices finished!
+this round took 1403.16 s
+80000 vertices finished!
+this round took 1403.17 s
+build index: 1403.17 s
+--------------Details of Index Occupation-------------
+labeling v, offset, labeling d, labeling w: 24912396, 24992951, 25290279, 25290279
+total number of unsigned ints in the index: 100485905
+total quries: 100
+total query time (in ms): 14538.1, 645625, 855.26, 0.533289
+average query time (in ms): 145.381, 6456.25, 8.5526, 0.00533289
+check minimality

@@ -38,6 +38,15 @@ public:
     vector<vector<uint32_t>> labeling_d;
     vector<vector<uint32_t>> labeling_w;
 
+    // tree decomposition
+    AdjList h_graph;
+    vector<set<uint32_t>> hgraph;
+    vector<uint32_t> v_index;
+    vector<pair<uint32_t, uint32_t>> v_degree;
+    vector<uint32_t> beg;
+    vector<uint32_t> end;
+    vector<uint32_t> decomp_order;
+
     WGraph();
     WGraph(string, string, bool);
 
@@ -80,6 +89,15 @@ public:
     void print_index_pll();
     void get_index_size();
     void check_minimality();
+
+    // tree decomposition
+    void tree_decomposition();
+    void tree_decomposition_2();
+    void print_hgraph();
+    void print_vdegree();
+    void print_vindex();
+    void print_beg_end();
+    void print_decomp_order();
 };
 #endif
 #pragma once

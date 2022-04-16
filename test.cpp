@@ -1,18 +1,18 @@
 #include <iostream>
 #include <vector>
+#include <random>
 
 using namespace std;
 
 int main() {
-    vector<uint32_t> vec {10,20,30,30,40,50};
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dist_1(1, 6);
+    std::uniform_int_distribution<> dist_2(10,20);
 
-    for (auto v : vec) {
-        cout << v << endl;
+    for (int n=0; n<10; n++) {
+        std::cout << dist_1(gen) << ',';
+        std::cout << dist_2(gen) << ' ';
     }
-
-    vector<uint32_t>::iterator low = lower_bound(vec.begin(), vec.end(), 30);
-
-    cout << "lower_bound = " << (low - vec.begin()) << endl;
-    cout << "vec.begin() = " << vec.begin() - vec.begin() << endl;
-    cout << "vec.end() = " << vec.end() - vec.begin() << endl;
+    std::cout << '\n';
 }
