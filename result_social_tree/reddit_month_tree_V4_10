@@ -1,0 +1,83 @@
+Perform tree decomposition for the first 70% of verties.
+
+Start tree decomposition...
+
+decomposing vertex 5000, time: 0.005 s
+decomposing vertex 10000, time: 0.01 s
+decomposing vertex 15000, time: 0.005 s
+decomposing vertex 20000, time: 0.01 s
+decomposing vertex 25000, time: 0.015 s
+Finishing tree decomposition at count = 25044
+Constructing new graph...
+Finished tree decomposition, total time = 0.13947 s
+
+the number of vertices: 35776
+the number of edges: 124330
+the number of weights: 41
+the maximum weight value: 40
+the maximum degree: 2336
+use V4 for first 10% vertices..., which is 3577
+0 vertices finished!
+this round took 0.023853 s
+2000 vertices finished!
+this round took 10.8499 s
+4000 vertices finished!
+this round took 11.0883 s
+6000 vertices finished!
+this round took 11.1036 s
+8000 vertices finished!
+this round took 11.11 s
+10000 vertices finished!
+this round took 11.1128 s
+12000 vertices finished!
+this round took 11.1159 s
+14000 vertices finished!
+this round took 11.1179 s
+16000 vertices finished!
+this round took 11.12 s
+18000 vertices finished!
+this round took 11.1225 s
+20000 vertices finished!
+this round took 11.1241 s
+22000 vertices finished!
+this round took 11.1256 s
+24000 vertices finished!
+this round took 11.127 s
+26000 vertices finished!
+this round took 11.1284 s
+28000 vertices finished!
+this round took 11.13 s
+30000 vertices finished!
+this round took 11.1321 s
+32000 vertices finished!
+this round took 11.1341 s
+34000 vertices finished!
+this round took 11.1362 s
+build index: 11.1377 s
+--------------Details of Index Occupation-------------
+labeling v, offset, labeling d, labeling w: 3405253, 3441029, 4517082, 4517082
+total number of unsigned ints in the index: 15880446
+Complete!
+	Command being timed: "timeout 30h ./wcsd_tree_decomp_partial reddit_month_degree V4 10 1"
+	User time (seconds): 11.24
+	System time (seconds): 0.08
+	Percent of CPU this job got: 99%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:11.41
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 130752
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 32802
+	Voluntary context switches: 217
+	Involuntary context switches: 2093
+	Swaps: 0
+	File system inputs: 4168
+	File system outputs: 16
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

@@ -39,12 +39,8 @@ public:
     vector<vector<uint32_t>> labeling_w;
 
     // tree decomposition
-    AdjList h_graph;
+    AdjList hgraph_;
     vector<set<uint32_t>> hgraph;
-    vector<uint32_t> v_index;
-    vector<pair<uint32_t, uint32_t>> v_degree;
-    vector<uint32_t> beg;
-    vector<uint32_t> end;
     vector<uint32_t> decomp_order;
 
     WGraph();
@@ -56,6 +52,9 @@ public:
     void get_graph_statistics();
     void print_graph();
     void preprocess(int);
+    void sort_by_degree();
+    void check_degree_order();
+
     //********************online solutions************************//
     uint32_t min_distance(vector<uint32_t>&, boost::dynamic_bitset<>&);
     uint32_t dijkstra(AdjList&, uint32_t, uint32_t);
@@ -91,13 +90,10 @@ public:
     void check_minimality();
 
     // tree decomposition
-    void tree_decomposition();
-    void tree_decomposition_2();
+    void tree_decomp();
     void print_hgraph();
-    void print_vdegree();
-    void print_vindex();
-    void print_beg_end();
-    void print_decomp_order();
+    void print_vec(vector<uint32_t> &vec);
+    void tree_decomp_partial(float);
 };
 #endif
 #pragma once

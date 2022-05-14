@@ -1,12 +1,13 @@
 import os
 
-graphs=["eu-2005","uk-2007"]
+graphs=["CTR","USA"]
 types=["V4"]
 thresholds = ["10"]
-result_path = "./query_time/"
+result_path = "./result_road_tree/"
 
 for graph in graphs:
     for type_ in types:
         for threshold in thresholds:
-            command = "/usr/bin/time -v timeout 30h ./wcsd "+ graph + "_degree " + type_ + " " + threshold + " 1 > " + result_path + graph + "_" + type_ + "_" + threshold + " 2>&1"
+            command = "/usr/bin/time -v timeout 50h ./wcsd_tree_decomp road_networks/"+ graph + "_tree " + type_ + " " + threshold + " 1 > " + result_path + graph + "_tree_" + type_ + "_" + threshold + " 2>&1"
+            print(command)
             os.system(command)

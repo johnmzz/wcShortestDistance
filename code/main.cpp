@@ -19,20 +19,27 @@ int main(int argc, char* argv[]) {
     bool isBin = true;
 
     WGraph g(data_path, input_graph, isBin);
-    g.get_graph_statistics();
     //g.print_graph();
     //g.save_graph_to_bin(data_path, input_graph);
 
+    //g.sort_by_degree();
+    //g.tree_decomp();
+    g.tree_decomp_partial(0.7);
+    //g.print_graph();
+    g.get_graph_statistics();
+    //g.check_degree_order();
+
+    // if (!isBin) g.save_graph_to_bin(data_path, input_graph);
     if (weight_intervals > 1) g.preprocess(weight_intervals);
 
     g.build_index(type, threshold);
-    //g.print_index_pll();
-    //g.print_index();
+    // g.print_index_pll();
+    // if (input_graph == "mz_test") g.print_index();
     g.get_index_size();
 
-    //if (input_graph == "mz_test") g.print_index();
+    cout << "Complete!" << endl;
 
-
+    /*
     // Test correctness
     random_device rd;
     std::mt19937 gen(rd());
@@ -76,10 +83,12 @@ int main(int argc, char* argv[]) {
         }
     }
     */
+    /*
     cout << "total quries: " << cnt << endl;
     cout << "total query time (in ms): " << q1 << ", " << q2 << ", " << q3 << ", " << q4 << endl;
     cout << "average query time (in ms): " << q1/cnt << ", " << q2/cnt << ", " << q3/cnt << ", " << q4/cnt << endl;
     //
     g.check_minimality();
+    */
     return 0;
 }

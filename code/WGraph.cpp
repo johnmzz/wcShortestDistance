@@ -2,6 +2,7 @@
 
 WGraph::WGraph() {
     graph = AdjList();
+    hgraph = vector<set<uint32_t>>();
     wlist = AdjList();
     nsize = 0;
     msize = 0;
@@ -156,17 +157,12 @@ void WGraph::get_graph_statistics() {
     cout << "the number of edges: " << msize << endl;
     cout << "the number of weights: " << wsize << endl;
     cout << "the maximum weight value: " << max_w << endl;
+
+    uint32_t max_degree = *max_element(ndegree.begin(), ndegree.end());
+    cout << "the maximum degree: " << max_degree << endl;
 }
 
 void WGraph::print_graph() {
-    // for (uint32_t u = 0; u < nsize; u++) {
-    //     cout << u << ": ";
-    //     for (uint32_t idx = 0; idx < ndegree[u]; idx++) {
-    //         cout << "<" << graph[u][idx] << ", " << wlist[u][idx] << ">, ";
-    //     }
-    //     cout << endl;
-    // }
-
     for (uint32_t u = 0; u < nsize; u++) {
         cout << u << ": ";
         for (uint32_t idx = 0; idx < ndegree[u]; idx++) {
@@ -931,25 +927,6 @@ void WGraph::build_index(string type, int threshold) {
                 vertex_prioritized_indexing_V5(u, updated, visited_r, this_visited_flag, turning_point_d, turning_point_w);
             }
             else {
-                vertex_prioritized_indexing_plus(u, updated, visited_r, this_visited_flag);
-            }
-            if (u % 2000 == 0) {
-                cout << u << " vertices finished!" << endl;
-                clock_t temp = clock();
-                cout << "this round took " << (float)(temp - start) / CLOCKS_PER_SEC << " s" << endl;
-            }
-        }
-    }
-    else if (type == "V6") {
-        tree_decomposition();
-        cout << "use V6 for first " << threshold << "\% vertices..." << ", which is " << (int)(nsize*threshold/100) << endl;
-        for (uint32_t u = 0; u < nsize; u++) {
-            if (u < (int)(nsize*threshold/100)) {
-                uint32_t u_ = v_degree[nsize-1-u].first;
-                vertex_prioritized_indexing_V4(u, updated, visited_r, this_visited_flag);
-            }
-            else {
-                uint32_t u_ = v_degree[nsize-1-u].first;
                 vertex_prioritized_indexing_plus(u, updated, visited_r, this_visited_flag);
             }
             if (u % 2000 == 0) {
@@ -1901,7 +1878,7 @@ void WGraph::preprocess(int num_intervals) {
 }
 
 void WGraph::print_hgraph() {
-    cout << "h_graph = " << endl;
+    cout << "h_graph size = " << hgraph.size() << endl;
     for (uint32_t i = 0; i < hgraph.size(); i++) {
         cout << i << ": [";
         for (auto j : hgraph[i]) {
@@ -1911,212 +1888,450 @@ void WGraph::print_hgraph() {
     }
 }
 
-void WGraph::print_vdegree() {
-    cout << "v_degree = " << endl;
-    for (uint32_t i = 0; i < v_degree.size(); i++) {
-        cout << i << ": " << "(" << v_degree[i].first << "," << v_degree[i].second << ")" << endl;
+void print_v_degree_ordered(const vector<pair<uint32_t, uint32_t>> &vec) {
+    for (auto v : vec) {
+        cout << "(" << v.first << "," << v.second << "),";
     }
+    cout << endl;
 }
 
-void WGraph::print_vindex() {
-    cout << "index = [";
-    for (auto i : v_index) {
-        cout << i << ",";
-    }
-    cout << "]" << endl;
-}
+// void WGraph::tree_decomposition() {
+//     clock_t start_total, end_total;
+//     start_total = clock();
+//     decomp_order = vector<uint32_t>(nsize);
 
-void WGraph::print_beg_end() {
-    cout << "beg = [";
-    for (auto i : beg) {
-        cout << i << ",";
-    }
-    cout << "]" << endl;
+//     // copy graph to hgraph_
+//     for (uint32_t i = 0; i < nsize; i++) {
+//         hgraph_.push_back(graph[i]);
+//     }
 
-    cout << "end = [";
-    for (auto i : end) {
-        cout << i << ",";
-    }
-    cout << "]" << endl;
-}
+//     // sort all vertices by degree
+//     vector<pair<uint32_t, uint32_t>> v_degree_ordered(nsize);
+//     for (uint32_t i = 0; i < graph.size(); i++) {
+//         v_degree_ordered[i] = make_pair(i, ndegree[i]);
+//     }
+//     std::sort(v_degree_ordered.begin(), v_degree_ordered.end(), [](auto &left, auto &right) {return left.second < right.second;});
 
-void WGraph::print_decomp_order() {
-    cout << "order = [";
-    for (auto i : decomp_order) {
-        cout << i << ",";
-    }
-    cout << "]" << endl;
-}
+//     // tree decomposition
+//     uint32_t i = nsize-1;
+//     while (!v_degree_ordered.empty()) {
+//         clock_t start, end;
+//         start = clock();
 
-void WGraph::tree_decomposition() {
-    // *********** copy graph ************
+//         uint32_t u = v_degree_ordered[0].first;
+//         v_degree_ordered.erase(v_degree_ordered.begin());
+//         decomp_order[i] = u;
+//         i--;
+
+//         // remove u from v's adjacency list
+//         for (auto v : hgraph_[u]) {
+//             hgraph_[v].erase(remove(hgraph_[v].begin(), hgraph_[v].end(), u), hgraph_[v].end());
+//         }
+
+//         // add edge between all neighbors of u
+//         for (auto v : hgraph_[u]) {
+//             for (auto w : hgraph_[u]) {
+//                 if ((v != w) && (find(hgraph_[v].begin(), hgraph_[v].end(), w) == hgraph_[v].end()) && (find(hgraph_[w].begin(), hgraph_[w].end(), v) == hgraph_[w].end())) {
+//                     hgraph_[w].push_back(v);
+//                     hgraph_[v].push_back(w);
+//                 }
+//             }
+//         }
+
+//         // re-calculate degrees of u's neighbors
+//         for (auto v : hgraph_[u]) {
+//             auto pos = std::find_if(v_degree_ordered.begin(), v_degree_ordered.end(), [v](const std::pair<uint32_t, uint32_t>& element){ return element.first == v;});
+//             pos->second = hgraph_[v].size();
+//         }
+
+//         // re-sort vertices by degree
+//         std::sort(v_degree_ordered.begin(), v_degree_ordered.end(), [](auto &left, auto &right) {return left.second < right.second;});
+
+//         // message
+//         end = clock();
+//         if (i % 10 == 0) cout << "decomposing vertice " << i << ", this round took " << (float)(end - start) / CLOCKS_PER_SEC << " s"  << endl;
+//     }
+
+//     // stor offset of each v in v_degree_ordered
+//     vector<uint32_t> offset(nsize);
+//     for (uint32_t i = 0; i < nsize; i++) {
+//         offset[decomp_order[i]] = i;
+//     }
+
+//     // construct new graph
+//     AdjList new_graph(nsize);
+//     AdjList new_wlist(nsize);
+//     for (uint32_t i = 0; i < nsize; i++) {
+//         uint32_t u = decomp_order[i];
+//         for (uint32_t j = 0; j < graph[u].size(); j++) {
+//             uint32_t v = graph[u][j];
+//             new_graph[i].push_back(offset[v]);
+//             new_wlist[i].push_back(wlist[u][j]);
+//         }
+//     }
+//     graph = new_graph;
+//     wlist = new_wlist;
+
+//     // reconstruct degree vector
+//     for (uint32_t i = 0; i < nsize; i++) {
+//         ndegree[i] = graph[i].size();
+//     }
+
+//     end_total = clock();
+//     cout << "tree decomposition: " << (float)(end_total - start_total) / CLOCKS_PER_SEC << " s" << endl;
+
+//     /*
+//     cout << "BFS process order: [";
+//     for (auto v : decomp_order) cout << v << ",";
+//     cout << "]" << endl;
+//     */
+// }
+
+// check if vertices of graph are ordered by degree (decreasing order)
+void WGraph::check_degree_order() {
     for (uint32_t i = 0; i < graph.size(); i++) {
-        set<uint32_t> s(graph[i].begin(), graph[i].end());
-        hgraph.push_back(s);
+        // cout << i << "," << ndegree[i] << endl;
+
+        if (i != 0 && ndegree[i] > ndegree[i-1]) {
+            cout << "Error: ndegree[" << i << "] > ndegree[" << i-1 << "]" << endl;
+        }
     }
+}
+
+void WGraph::sort_by_degree() {
+    // sort all vertices by degree
+    vector<pair<uint32_t, uint32_t>> v_degree_ordered(nsize);
+    for (uint32_t i = 0; i < graph.size(); i++) {
+        v_degree_ordered[i] = make_pair(i, ndegree[i]);
+    }
+    std::sort(v_degree_ordered.begin(), v_degree_ordered.end(), [](auto &left, auto &right) {return left.second > right.second;});
+
+    // stor offset of each v in v_degree_ordered
+    vector<uint32_t> offset(nsize);
+    for (uint32_t i = 0; i < nsize; i++) {
+        offset[v_degree_ordered[i].first] = i;
+    }
+
+    // construct new graph
+    AdjList new_graph(nsize);
+    AdjList new_wlist(nsize);
+    for (uint32_t i = 0; i < nsize; i++) {
+        uint32_t u = v_degree_ordered[i].first;
+        for (uint32_t j = 0; j < graph[u].size(); j++) {
+            uint32_t v = graph[u][j];
+            new_graph[i].push_back(offset[v]);
+            new_wlist[i].push_back(wlist[u][j]);
+        }
+    }
+    graph = new_graph;
+    wlist = new_wlist;
+
+    // reconstruct degree vector
+    for (uint32_t i = 0; i < nsize; i++) {
+        ndegree[i] = graph[i].size();
+    }
+
+    cout << "Finished sorting by degree." << endl;
+    // print_graph();
+}
+
+void WGraph::tree_decomp() {
+    clock_t start_total, end_total;
+    start_total = clock();
+
+    // initialize hgraph as graph
+    for (auto i = 0; i < nsize; i++) {
+        set<uint32_t> neighbors;
+        for (auto v : graph[i]) {
+            neighbors.insert(v);
+        }
+        hgraph.push_back(neighbors);
+    }
+
+    uint32_t count = 0;
+    vector<uint32_t> old_deg(nsize), new_deg(nsize);
+
+    auto comp = [&old_deg](const uint32_t &a, const uint32_t &b) -> bool {
+        return old_deg[a] == old_deg[b] ? a < b : old_deg[a] < old_deg[b];
+    };
+
+    set<uint32_t, decltype(comp)> ndsQ(comp); // set of vID, ordered by comp (degree then ID)
+
+    for (uint32_t s = 0; s < nsize; s++) {
+	    new_deg[s] = old_deg[s] = graph[s].size();
+	    ndsQ.insert(s);
+	}
+
+    vector<int32_t> vertexOrder(nsize, -1);
+    uint32_t vorder = 0;
+
     // print_hgraph();
+    // cout << "old_deg = ";
+    // print_vec(old_deg);
 
-    // ************ initialize degree and sort ************
-    for (uint32_t i = 0; i < nsize; i++) {
-        // cout << i << ": " << ndegree[i] << endl;
-        pair<uint32_t, uint32_t> p(i, ndegree[i]);
-        v_degree.push_back(p);
-    }
-    // print_vdegree();
-    sort(v_degree.begin(), v_degree.end(), [](auto &left, auto &right) { return left.second < right.second; });
-    // print_vdegree();
+    // cout << "ndsQ = [";
+    // for (auto v : ndsQ) cout << v << ",";
+    // cout << "]" << endl;
 
-    // ************ initialize index to degree ************
-    v_index = vector<uint32_t>(nsize);
-    for (int i = 0; i < nsize; i++) {
-        v_index[v_degree[i].first] = i;
-    }
-    // print_vindex();
+    cout << "\nStart tree decomposition...\n" << endl;
 
-    // ************ initialize begin/end ************
-    beg = vector<uint32_t>(nsize, INF);
-    end = vector<uint32_t>(nsize, INF);
-    for (uint32_t i = 0; i < nsize; i++) {
-        if (i == 0 || v_degree[i-1].second != v_degree[i].second) {
-            beg[v_degree[i].second] = i;
-        }
-        if (i == (nsize-1) || v_degree[i+1].second != v_degree[i].second) {
-            end[v_degree[i].second] = i;
-        }
-    }
-    // print_beg_end();
+    while (ndsQ.size() > 0) {
+        clock_t start, end;
+        start = clock();
 
-    // ************ start decomposition ************
-    cout << "Start tree decomposition..." << endl;
-    for (uint32_t i = 0; i < nsize; i++) {
-        uint32_t u = v_degree[i].first;
+        count++;
+        uint32_t vid = *ndsQ.begin();
+        ndsQ.erase(*ndsQ.begin());
 
-        for (auto v = hgraph[u].begin(); v != hgraph[u].end(); v++) {
-            for (auto w = hgraph[u].begin(); w != hgraph[u].end(); w++) {
-                if ((*v != *w) && (*v < *w)) {
-                    // cout << *v << "," << *w << endl;
-                    hgraph[*v].insert(*w);
-                    hgraph[*w].insert(*v);
-                }
+        // re-order ndsQ if vid's new_deg > old_deg
+        while (old_deg[vid] != new_deg[vid]) {
+		    old_deg[vid] = new_deg[vid];
+		    ndsQ.insert(vid);
+
+		    vid = *ndsQ.begin();
+		    ndsQ.erase(ndsQ.begin());
+	    }
+        // cout << "vid = " << vid << endl;
+        // cout << "ndsQ = ["; for (auto v : ndsQ) cout << v << ","; cout << "]" << endl;
+
+        vertexOrder[vid] = vorder++;
+        auto &v_adj = hgraph[vid];
+
+        // cout << "v_adj = ["; for (auto v : v_adj) cout << v << ","; cout << "]" << endl;
+
+        vector<uint32_t> valid_neighbor_index;
+        for (auto u : v_adj) {
+            if (vertexOrder[u] == -1) {
+                valid_neighbor_index.push_back(u);
+                hgraph[u].erase(vid);
             }
         }
+        vector<int> neighbor_degree_increase_cnt(valid_neighbor_index.size(), 0);
 
-        for (auto v : hgraph[u]) {
-            hgraph[v].erase(u);
-            uint32_t idx = v_index[v];
-            uint32_t old = v_degree[idx].second;
-            uint32_t new_ = hgraph[v].size();
+        // cout << "valid_neighbor_index = ["; for (auto v : valid_neighbor_index) cout << v << ","; cout << "]" << endl;
+        // cout << "neighbor_degree_increase_cnt = ["; for (auto v : neighbor_degree_increase_cnt) cout << v << ","; cout << "]" << endl;
 
-            if (new_ < old) {
-                uint32_t pos = max(i+1, beg[old]);
+        // iterate through neighbor-pairs of vid
+        for (auto i = 0; i < valid_neighbor_index.size(); i++) {
+            uint32_t u = valid_neighbor_index[i];
+            neighbor_degree_increase_cnt[i]--;
 
-                v_degree[idx] = v_degree[pos];
-                v_index[v_degree[pos].first] = idx;
+            for (auto j = i+1; j < valid_neighbor_index.size(); j++) {
+                uint32_t w = valid_neighbor_index[j];
 
-                v_degree[pos] = pair<uint32_t, uint32_t>(v, new_);
-                v_index[v] = pos;
-
-                beg[old] = pos + 1;
-                if (beg[old] > end[old]) {
-                    beg[old] = INF;
-                    end[old] = INF;
-                }
-
-                if (end[new_] == INF) {
-                    beg[new_] = pos;
-                    end[new_] = pos;
-                } else {
-                    end[new_] = pos;
+                if (hgraph[u].find(w) == hgraph[u].end()) {
+                    hgraph[u].insert(w);
+                    hgraph[w].insert(u);
+                    neighbor_degree_increase_cnt[i]++;
+                    neighbor_degree_increase_cnt[j]++;
                 }
             }
-            else if (new_ > old) {
-                for (uint32_t j = old; j < new_; j++) {
-                    uint32_t pos = end[j];
 
-                    v_degree[idx] = v_degree[pos];
-                    v_index[v_degree[pos].first] = idx;
+            new_deg[u] += neighbor_degree_increase_cnt[i];
 
-                    v_degree[pos] = pair<uint32_t, uint32_t>(v, j+1);
-                    v_index[v] = pos;
-
-                    end[j] = pos - 1;
-                    if (end[j] < beg[j]) {
-                        beg[j] = INF;
-                        end[j] = INF;
-                    }
-
-                    if (beg[j+1] == INF) {
-                        beg[j+1] = pos;
-                        end[j+1] = pos;
-                    } else {
-                        beg[j+1] = pos;
-                    }
-
-                    idx = v_index[v];
-                }
-            }
+            if (neighbor_degree_increase_cnt[i] < 0) {
+		        ndsQ.erase(u);
+		        old_deg[u] = new_deg[u];
+		        ndsQ.insert(u);
+		    }
         }
+        // print_hgraph();
+        // cout << "ndsQ = ["; for (auto v : ndsQ) cout << v << ","; cout << "]" << endl;
+        // cout << endl;
+        end = clock();
+        if (count % 5000 == 0) cout << "decomposing vertex " << count << "time: " << 5000*(float)(end - start) / CLOCKS_PER_SEC << " s" << endl;
     }
 
-    // ************ Finished decomposition ************
-    // cout << "Finished decomposition, result: " << endl;
-    // print_vdegree();
+    //print_graph();
+
+    // construct new graph
+    cout << "Constructing new graph..." << endl;
+
+    AdjList new_graph(nsize);
+    AdjList new_wlist(nsize);
+    for (uint32_t i = 0; i < nsize; i++) {
+        uint32_t u = nsize - vertexOrder[i] - 1;
+        for (uint32_t j = 0; j < graph[i].size(); j++) {
+            uint32_t v = nsize - vertexOrder[graph[i][j]] - 1;
+            new_graph[u].push_back(v);
+            new_wlist[u].push_back(wlist[i][j]);
+        }
+    }
+    graph = new_graph;
+    wlist = new_wlist;
+
+    // reconstruct degree vector
+    for (uint32_t i = 0; i < nsize; i++) {
+        ndegree[i] = graph[i].size();
+    }
+
+    // cout << "after:" << endl;
+    // print_graph();
+
+    // cout << "vertexOrder = [";
+    // for (auto v : vertexOrder) cout << v << ",";
+    // cout << "]" << endl;
+
+    end_total = clock();
+    cout << "Finished tree decomposition, total time = " << (float)(end_total - start_total) / CLOCKS_PER_SEC << " s" << endl;
 }
 
-void WGraph::tree_decomposition_2() {
-    // *********** copy graph ************
-    for (uint32_t i = 0; i < graph.size(); i++) {
-        set<uint32_t> s(graph[i].begin(), graph[i].end());
-        hgraph.push_back(s);
+void WGraph::print_vec(vector<uint32_t> &vec) {
+    cout << "[";
+    for (auto v : vec) cout << v << ",";
+    cout << "]" << endl;
+}
+
+void WGraph::tree_decomp_partial(float threshold) {
+    cout << "Perform tree decomposition for the first " << (int)(threshold*100) << "\% of verties." << endl;
+    clock_t start_total, end_total;
+    start_total = clock();
+
+    // initialize hgraph as graph
+    for (auto i = 0; i < nsize; i++) {
+        set<uint32_t> neighbors;
+        for (auto v : graph[i]) {
+            neighbors.insert(v);
+        }
+        hgraph.push_back(neighbors);
     }
-    //print_hgraph();
 
-    // ************ initialize degree and sort ************
-    for (uint32_t i = 0; i < nsize; i++) {
-        // cout << i << ": " << ndegree[i] << endl;
-        pair<uint32_t, uint32_t> p(i, ndegree[i]);
-        v_degree.push_back(p);
-    }
-    // print_vdegree();
-    sort(v_degree.begin(), v_degree.end(), [](auto &left, auto &right) { return left.second < right.second; });
-    //print_vdegree();
+    uint32_t count = 0;
+    vector<uint32_t> old_deg(nsize), new_deg(nsize);
 
-    // ************ initialize index to degree ************
-    v_index = vector<uint32_t>(nsize);
-    for (int i = 0; i < nsize; i++) {
-        v_index[v_degree[i].first] = i;
-    }
-    //print_vindex();
+    auto comp = [&old_deg](const uint32_t &a, const uint32_t &b) -> bool {
+        return old_deg[a] == old_deg[b] ? a < b : old_deg[a] < old_deg[b];
+    };
 
-    // ************ start decomposition ************
-    cout << "Start tree decomposition..." << endl;
-    for (uint32_t i = 0; i < nsize; i++) {
-        uint32_t u = v_degree[0].first;
+    set<uint32_t, decltype(comp)> ndsQ(comp); // set of vID, ordered by comp (degree then ID)
 
-        for (auto v = hgraph[u].begin(); v != hgraph[u].end(); v++) {
-            for (auto w = hgraph[u].begin(); w != hgraph[u].end(); w++) {
-                if ((*v != *w) && (*v < *w)) {
-                    // cout << *v << "," << *w << endl;
-                    hgraph[*v].insert(*w);
-                    hgraph[*w].insert(*v);
-                }
+    for (uint32_t s = 0; s < nsize; s++) {
+	    new_deg[s] = old_deg[s] = graph[s].size();
+	    ndsQ.insert(s);
+	}
+
+    vector<int32_t> vertexOrder(nsize, -1);
+    uint32_t vorder = 0;
+
+    cout << "\nStart tree decomposition...\n" << endl;
+
+    while (ndsQ.size() > 0) {
+        clock_t start, end;
+        start = clock();
+
+        count++;
+        uint32_t vid = *ndsQ.begin();
+        ndsQ.erase(*ndsQ.begin());
+
+        // re-order ndsQ if vid's new_deg > old_deg
+        while (old_deg[vid] != new_deg[vid]) {
+		    old_deg[vid] = new_deg[vid];
+		    ndsQ.insert(vid);
+
+		    vid = *ndsQ.begin();
+		    ndsQ.erase(ndsQ.begin());
+	    }
+
+        vertexOrder[vid] = vorder++;
+        auto &v_adj = hgraph[vid];
+
+        vector<uint32_t> valid_neighbor_index;
+        for (auto u : v_adj) {
+            if (vertexOrder[u] == -1) {
+                valid_neighbor_index.push_back(u);
+                hgraph[u].erase(vid);
             }
         }
+        vector<int> neighbor_degree_increase_cnt(valid_neighbor_index.size(), 0);
 
-        for (auto v : hgraph[u]) {
-            hgraph[v].erase(u);
-            v_degree[v].second = hgraph[v].size();
+        // iterate through neighbor-pairs of vid
+        for (auto i = 0; i < valid_neighbor_index.size(); i++) {
+            uint32_t u = valid_neighbor_index[i];
+            neighbor_degree_increase_cnt[i]--;
+
+            for (auto j = i+1; j < valid_neighbor_index.size(); j++) {
+                uint32_t w = valid_neighbor_index[j];
+
+                if (hgraph[u].find(w) == hgraph[u].end()) {
+                    hgraph[u].insert(w);
+                    hgraph[w].insert(u);
+                    neighbor_degree_increase_cnt[i]++;
+                    neighbor_degree_increase_cnt[j]++;
+                }
+            }
+
+            new_deg[u] += neighbor_degree_increase_cnt[i];
+
+            if (neighbor_degree_increase_cnt[i] < 0) {
+		        ndsQ.erase(u);
+		        old_deg[u] = new_deg[u];
+		        ndsQ.insert(u);
+		    }
         }
+        end = clock();
+        if (count % 5000 == 0) cout << "decomposing vertex " << count << ", time: " << 5000*(float)(end - start) / CLOCKS_PER_SEC << " s" << endl;
 
-        decomp_order.push_back(u);
-        v_degree.erase(v_degree.begin());
-        sort(v_degree.begin(), v_degree.end(), [](auto &left, auto &right) { return left.second < right.second; });
-
-        for (int j = 0; j < v_degree.size(); j++) {
-            v_index[v_degree[j].first] = j;
+        if (count > threshold * nsize) {
+            cout << "Finishing tree decomposition at count = " << count << endl;
+            break;
         }
     }
 
-    // ************ Finished decomposition ************
-    print_decomp_order();
+    // cout << "vertexOrder = [";
+    // for (auto v : vertexOrder) cout << v << ",";
+    // cout << "]" << endl;
+
+    // find remaining vertices not sorted
+    vector<uint32_t> v_remain;
+    for (uint32_t i = 0; i < nsize; i++) {
+        if (vertexOrder[i] == -1) {
+            v_remain.push_back(i);
+        }
+    }
+
+    // sort all remaining vertices by degree
+    vector<pair<uint32_t, uint32_t>> v_degree_ordered(v_remain.size());
+    for (uint32_t i = 0; i < v_remain.size(); i++) {
+        // v_degree_ordered[i] = make_pair(v_remain[i], ndegree[v_remain[i]]);
+        v_degree_ordered[i] = make_pair(v_remain[i], hgraph[v_remain[i]].size());
+    }
+    std::sort(v_degree_ordered.begin(), v_degree_ordered.end(), [](auto &left, auto &right) {return left.second > right.second;});
+    std::reverse(v_degree_ordered.begin(),v_degree_ordered.end());
+
+    // store order in vertexOrder
+    for (auto v : v_degree_ordered) {
+        vertexOrder[v.first] = count;
+        count++;
+    }
+
+    // cout << "vertexOrder = [";
+    // for (auto v : vertexOrder) cout << v << ",";
+    // cout << "]" << endl;
+
+    // construct new graph
+    cout << "Constructing new graph..." << endl;
+
+    AdjList new_graph(nsize);
+    AdjList new_wlist(nsize);
+    for (uint32_t i = 0; i < nsize; i++) {
+        uint32_t u = nsize - vertexOrder[i] - 1;
+        for (uint32_t j = 0; j < graph[i].size(); j++) {
+            uint32_t v = nsize - vertexOrder[graph[i][j]] - 1;
+            new_graph[u].push_back(v);
+            new_wlist[u].push_back(wlist[i][j]);
+        }
+    }
+    graph = new_graph;
+    wlist = new_wlist;
+
+    // reconstruct degree vector
+    for (uint32_t i = 0; i < nsize; i++) {
+        ndegree[i] = graph[i].size();
+    }
+
+    // cout << "after:" << endl;
+    // print_graph();
+
+    end_total = clock();
+    cout << "Finished tree decomposition, total time = " << (float)(end_total - start_total) / CLOCKS_PER_SEC << " s" << endl << endl;
 }
