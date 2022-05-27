@@ -63,30 +63,9 @@ int main(int argc, char* argv[]) {
 
         }
     }
-
-   /*
-    uniform_int_distribution<uint32_t> gen_s(0, g.nsize-1);
-    uniform_int_distribution<uint32_t> gen_d(0, g.nsize-1);
-    int cnt = 100;
-    for (int i = 0; i < cnt; i++) {
-        uint32_t r = gen_num(gen);
-        uint32_t s = gen_s(gen);
-        uint32_t t = gen_d(gen);
-
-        uint32_t d1 = g.constrained_shortest_distance_naive(s, t, r, q1);
-        uint32_t d2 = g.constrained_shortest_distance_dijkstra(s, t, r, q2);
-        uint32_t d3 = g.constrained_shortest_distance_plus(s, t, r, q3);
-        uint32_t d4 = g.query(s, t, r, q4);
-        if (d1 != d2 || d1 != d3 || d2 != d3 || d1 != d4 || d2 != d4 || d3 != d4) {
-            cout << "ERROR: s, t, r: " << s << " " << t << " " << r << "; dist: " << d1 << " " << d2 << " " << d3 << " " << d4 << endl;
-        }
-    }
-    */
-    /*
     cout << "total quries: " << cnt << endl;
     cout << "total query time (in ms): " << q1 << ", " << q2 << ", " << q3 << ", " << q4 << endl;
     cout << "average query time (in ms): " << q1/cnt << ", " << q2/cnt << ", " << q3/cnt << ", " << q4/cnt << endl;
-    //
     g.check_minimality();
     */
     return 0;
