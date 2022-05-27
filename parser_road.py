@@ -13,7 +13,7 @@ def parse_road(path, name, delim, num_weights):
     }
 
     f = open("./data/road_networks_org/" + name + ".txt", 'r')
-    fgraph = open("./data/road_networks/" + name + ".txt", 'w+')
+    fgraph = open("./data/road_networks/" + name + "_" + str(num_weights) + ".txt", 'w+')
 
     fgraph.write(str(sizes[name][0]) + " " + str(sizes[name][1]) + " " + str(num_weights) + "\n")
     for line in f.readlines():
@@ -30,4 +30,4 @@ path = "./data/road_networks"
 
 for graph in graphs:
     print(f"parsing {graph}...")
-    parse_road(path, graph, " ", 5)
+    parse_road(path, graph, " ", 20)

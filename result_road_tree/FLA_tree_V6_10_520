@@ -1,0 +1,1325 @@
+
+Start tree decomposition...
+
+decomposing vertex 5000time: 0.005 s
+decomposing vertex 10000time: 0.005 s
+decomposing vertex 15000time: 0.005 s
+decomposing vertex 20000time: 0.01 s
+decomposing vertex 25000time: 0.01 s
+decomposing vertex 30000time: 0.005 s
+decomposing vertex 35000time: 0.005 s
+decomposing vertex 40000time: 0.01 s
+decomposing vertex 45000time: 0.005 s
+decomposing vertex 50000time: 0.01 s
+decomposing vertex 55000time: 0.01 s
+decomposing vertex 60000time: 0.005 s
+decomposing vertex 65000time: 0.005 s
+decomposing vertex 70000time: 0.01 s
+decomposing vertex 75000time: 0.01 s
+decomposing vertex 80000time: 0.005 s
+decomposing vertex 85000time: 0.01 s
+decomposing vertex 90000time: 0.005 s
+decomposing vertex 95000time: 0.005 s
+decomposing vertex 100000time: 0.005 s
+decomposing vertex 105000time: 0.005 s
+decomposing vertex 110000time: 0.01 s
+decomposing vertex 115000time: 0.01 s
+decomposing vertex 120000time: 0.005 s
+decomposing vertex 125000time: 0.005 s
+decomposing vertex 130000time: 0.005 s
+decomposing vertex 135000time: 0.01 s
+decomposing vertex 140000time: 0.005 s
+decomposing vertex 145000time: 0.005 s
+decomposing vertex 150000time: 0.005 s
+decomposing vertex 155000time: 0.005 s
+decomposing vertex 160000time: 0.005 s
+decomposing vertex 165000time: 0.005 s
+decomposing vertex 170000time: 0.005 s
+decomposing vertex 175000time: 0.005 s
+decomposing vertex 180000time: 0.005 s
+decomposing vertex 185000time: 0.005 s
+decomposing vertex 190000time: 0.01 s
+decomposing vertex 195000time: 0.005 s
+decomposing vertex 200000time: 0.01 s
+decomposing vertex 205000time: 0.01 s
+decomposing vertex 210000time: 0.005 s
+decomposing vertex 215000time: 0.015 s
+decomposing vertex 220000time: 0.005 s
+decomposing vertex 225000time: 0.01 s
+decomposing vertex 230000time: 0.01 s
+decomposing vertex 235000time: 0.01 s
+decomposing vertex 240000time: 0.01 s
+decomposing vertex 245000time: 0.005 s
+decomposing vertex 250000time: 0.005 s
+decomposing vertex 255000time: 0.005 s
+decomposing vertex 260000time: 0 s
+decomposing vertex 265000time: 0.01 s
+decomposing vertex 270000time: 0.01 s
+decomposing vertex 275000time: 0.005 s
+decomposing vertex 280000time: 0.01 s
+decomposing vertex 285000time: 0.005 s
+decomposing vertex 290000time: 0.005 s
+decomposing vertex 295000time: 0.005 s
+decomposing vertex 300000time: 0.01 s
+decomposing vertex 305000time: 0.005 s
+decomposing vertex 310000time: 0.005 s
+decomposing vertex 315000time: 0.005 s
+decomposing vertex 320000time: 0.015 s
+decomposing vertex 325000time: 0.01 s
+decomposing vertex 330000time: 0.005 s
+decomposing vertex 335000time: 0.005 s
+decomposing vertex 340000time: 0.005 s
+decomposing vertex 345000time: 0.005 s
+decomposing vertex 350000time: 0.005 s
+decomposing vertex 355000time: 0.005 s
+decomposing vertex 360000time: 0.01 s
+decomposing vertex 365000time: 0 s
+decomposing vertex 370000time: 0 s
+decomposing vertex 375000time: 0.005 s
+decomposing vertex 380000time: 0.005 s
+decomposing vertex 385000time: 0.01 s
+decomposing vertex 390000time: 0.005 s
+decomposing vertex 395000time: 0 s
+decomposing vertex 400000time: 0.005 s
+decomposing vertex 405000time: 0.005 s
+decomposing vertex 410000time: 0.005 s
+decomposing vertex 415000time: 0 s
+decomposing vertex 420000time: 0.01 s
+decomposing vertex 425000time: 0.01 s
+decomposing vertex 430000time: 0.01 s
+decomposing vertex 435000time: 0.005 s
+decomposing vertex 440000time: 0.01 s
+decomposing vertex 445000time: 0.005 s
+decomposing vertex 450000time: 0.01 s
+decomposing vertex 455000time: 0.005 s
+decomposing vertex 460000time: 0.005 s
+decomposing vertex 465000time: 0.01 s
+decomposing vertex 470000time: 0.005 s
+decomposing vertex 475000time: 0.005 s
+decomposing vertex 480000time: 0.005 s
+decomposing vertex 485000time: 0.01 s
+decomposing vertex 490000time: 0.005 s
+decomposing vertex 495000time: 0.01 s
+decomposing vertex 500000time: 0.005 s
+decomposing vertex 505000time: 0.005 s
+decomposing vertex 510000time: 0.01 s
+decomposing vertex 515000time: 0 s
+decomposing vertex 520000time: 0.005 s
+decomposing vertex 525000time: 0.005 s
+decomposing vertex 530000time: 0.005 s
+decomposing vertex 535000time: 0.005 s
+decomposing vertex 540000time: 0.005 s
+decomposing vertex 545000time: 0.01 s
+decomposing vertex 550000time: 0.005 s
+decomposing vertex 555000time: 0.005 s
+decomposing vertex 560000time: 0.005 s
+decomposing vertex 565000time: 0.01 s
+decomposing vertex 570000time: 0.005 s
+decomposing vertex 575000time: 0.005 s
+decomposing vertex 580000time: 0.005 s
+decomposing vertex 585000time: 0.005 s
+decomposing vertex 590000time: 0.005 s
+decomposing vertex 595000time: 0.005 s
+decomposing vertex 600000time: 0.005 s
+decomposing vertex 605000time: 0.005 s
+decomposing vertex 610000time: 0.01 s
+decomposing vertex 615000time: 0.005 s
+decomposing vertex 620000time: 0.01 s
+decomposing vertex 625000time: 0.005 s
+decomposing vertex 630000time: 0.005 s
+decomposing vertex 635000time: 0.005 s
+decomposing vertex 640000time: 0.005 s
+decomposing vertex 645000time: 0.005 s
+decomposing vertex 650000time: 0.005 s
+decomposing vertex 655000time: 0.015 s
+decomposing vertex 660000time: 0.01 s
+decomposing vertex 665000time: 0.01 s
+decomposing vertex 670000time: 0.01 s
+decomposing vertex 675000time: 0.01 s
+decomposing vertex 680000time: 0.01 s
+decomposing vertex 685000time: 0.015 s
+decomposing vertex 690000time: 0.01 s
+decomposing vertex 695000time: 0.01 s
+decomposing vertex 700000time: 0.015 s
+decomposing vertex 705000time: 0.01 s
+decomposing vertex 710000time: 0.015 s
+decomposing vertex 715000time: 0.01 s
+decomposing vertex 720000time: 0.01 s
+decomposing vertex 725000time: 0.01 s
+decomposing vertex 730000time: 0.005 s
+decomposing vertex 735000time: 0.02 s
+decomposing vertex 740000time: 0.005 s
+decomposing vertex 745000time: 0.005 s
+decomposing vertex 750000time: 0.01 s
+decomposing vertex 755000time: 0.01 s
+decomposing vertex 760000time: 0.005 s
+decomposing vertex 765000time: 0.01 s
+decomposing vertex 770000time: 0.01 s
+decomposing vertex 775000time: 0.01 s
+decomposing vertex 780000time: 0.005 s
+decomposing vertex 785000time: 0.005 s
+decomposing vertex 790000time: 0.01 s
+decomposing vertex 795000time: 0.02 s
+decomposing vertex 800000time: 0.01 s
+decomposing vertex 805000time: 0.01 s
+decomposing vertex 810000time: 0.005 s
+decomposing vertex 815000time: 0.01 s
+decomposing vertex 820000time: 0.005 s
+decomposing vertex 825000time: 0.005 s
+decomposing vertex 830000time: 0.01 s
+decomposing vertex 835000time: 0.01 s
+decomposing vertex 840000time: 0.01 s
+decomposing vertex 845000time: 0.005 s
+decomposing vertex 850000time: 0.015 s
+decomposing vertex 855000time: 0.01 s
+decomposing vertex 860000time: 0.01 s
+decomposing vertex 865000time: 0.015 s
+decomposing vertex 870000time: 0.015 s
+decomposing vertex 875000time: 0.01 s
+decomposing vertex 880000time: 0.015 s
+decomposing vertex 885000time: 0.01 s
+decomposing vertex 890000time: 0.005 s
+decomposing vertex 895000time: 0.015 s
+decomposing vertex 900000time: 0.015 s
+decomposing vertex 905000time: 0.015 s
+decomposing vertex 910000time: 0.035 s
+decomposing vertex 915000time: 0.02 s
+decomposing vertex 920000time: 0.025 s
+decomposing vertex 925000time: 0.01 s
+decomposing vertex 930000time: 0.02 s
+decomposing vertex 935000time: 0.01 s
+decomposing vertex 940000time: 0.02 s
+decomposing vertex 945000time: 0.015 s
+decomposing vertex 950000time: 0.02 s
+decomposing vertex 955000time: 0.02 s
+decomposing vertex 960000time: 0.025 s
+decomposing vertex 965000time: 0.02 s
+decomposing vertex 970000time: 0.02 s
+decomposing vertex 975000time: 0.025 s
+decomposing vertex 980000time: 0.025 s
+decomposing vertex 985000time: 0.03 s
+decomposing vertex 990000time: 0.025 s
+decomposing vertex 995000time: 0.03 s
+decomposing vertex 1000000time: 0.035 s
+decomposing vertex 1005000time: 0.035 s
+decomposing vertex 1010000time: 0.035 s
+decomposing vertex 1015000time: 0.05 s
+decomposing vertex 1020000time: 0.025 s
+decomposing vertex 1025000time: 0.02 s
+decomposing vertex 1030000time: 0.055 s
+decomposing vertex 1035000time: 0.035 s
+decomposing vertex 1040000time: 0.045 s
+decomposing vertex 1045000time: 0.035 s
+decomposing vertex 1050000time: 0.11 s
+decomposing vertex 1055000time: 0.055 s
+decomposing vertex 1060000time: 0.1 s
+decomposing vertex 1065000time: 0.15 s
+decomposing vertex 1070000time: 0.895 s
+Constructing new graph...
+Finished tree decomposition, total time = 4.41454 s
+the number of vertices: 1070376
+the number of edges: 2712798
+the number of weights: 5
+the maximum weight value: 5
+the maximum degree: 16
+use V6 for first 10% vertices..., which is 107037
+0 vertices finished!
+this round took 0.910554 s
+2000 vertices finished!
+this round took 308.167 s
+4000 vertices finished!
+this round took 359.92 s
+6000 vertices finished!
+this round took 386.823 s
+8000 vertices finished!
+this round took 408.3 s
+10000 vertices finished!
+this round took 423.575 s
+12000 vertices finished!
+this round took 435.768 s
+14000 vertices finished!
+this round took 444.852 s
+16000 vertices finished!
+this round took 453.277 s
+18000 vertices finished!
+this round took 462.107 s
+20000 vertices finished!
+this round took 471.217 s
+22000 vertices finished!
+this round took 479.196 s
+24000 vertices finished!
+this round took 486.012 s
+26000 vertices finished!
+this round took 492.597 s
+28000 vertices finished!
+this round took 499.178 s
+30000 vertices finished!
+this round took 505.378 s
+32000 vertices finished!
+this round took 511.686 s
+34000 vertices finished!
+this round took 517.801 s
+36000 vertices finished!
+this round took 523.584 s
+38000 vertices finished!
+this round took 529.312 s
+40000 vertices finished!
+this round took 535.077 s
+42000 vertices finished!
+this round took 540.552 s
+44000 vertices finished!
+this round took 546.344 s
+46000 vertices finished!
+this round took 551.632 s
+48000 vertices finished!
+this round took 557.013 s
+50000 vertices finished!
+this round took 562.481 s
+52000 vertices finished!
+this round took 567.75 s
+54000 vertices finished!
+this round took 572.985 s
+56000 vertices finished!
+this round took 578.25 s
+58000 vertices finished!
+this round took 583.476 s
+60000 vertices finished!
+this round took 588.784 s
+62000 vertices finished!
+this round took 593.948 s
+64000 vertices finished!
+this round took 599.029 s
+66000 vertices finished!
+this round took 604.163 s
+68000 vertices finished!
+this round took 609.18 s
+70000 vertices finished!
+this round took 614.326 s
+72000 vertices finished!
+this round took 619.483 s
+74000 vertices finished!
+this round took 624.692 s
+76000 vertices finished!
+this round took 629.701 s
+78000 vertices finished!
+this round took 634.767 s
+80000 vertices finished!
+this round took 639.795 s
+82000 vertices finished!
+this round took 644.809 s
+84000 vertices finished!
+this round took 649.72 s
+86000 vertices finished!
+this round took 654.67 s
+88000 vertices finished!
+this round took 659.68 s
+90000 vertices finished!
+this round took 664.684 s
+92000 vertices finished!
+this round took 669.692 s
+94000 vertices finished!
+this round took 674.733 s
+96000 vertices finished!
+this round took 679.771 s
+98000 vertices finished!
+this round took 684.798 s
+100000 vertices finished!
+this round took 689.793 s
+102000 vertices finished!
+this round took 694.709 s
+104000 vertices finished!
+this round took 699.633 s
+106000 vertices finished!
+this round took 704.612 s
+108000 vertices finished!
+this round took 707.172 s
+110000 vertices finished!
+this round took 707.248 s
+112000 vertices finished!
+this round took 707.376 s
+114000 vertices finished!
+this round took 707.487 s
+116000 vertices finished!
+this round took 707.638 s
+118000 vertices finished!
+this round took 707.766 s
+120000 vertices finished!
+this round took 707.917 s
+122000 vertices finished!
+this round took 708.021 s
+124000 vertices finished!
+this round took 708.145 s
+126000 vertices finished!
+this round took 708.265 s
+128000 vertices finished!
+this round took 708.42 s
+130000 vertices finished!
+this round took 708.596 s
+132000 vertices finished!
+this round took 708.742 s
+134000 vertices finished!
+this round took 708.88 s
+136000 vertices finished!
+this round took 709 s
+138000 vertices finished!
+this round took 709.089 s
+140000 vertices finished!
+this round took 709.178 s
+142000 vertices finished!
+this round took 709.268 s
+144000 vertices finished!
+this round took 709.359 s
+146000 vertices finished!
+this round took 709.476 s
+148000 vertices finished!
+this round took 709.555 s
+150000 vertices finished!
+this round took 709.625 s
+152000 vertices finished!
+this round took 709.658 s
+154000 vertices finished!
+this round took 709.683 s
+156000 vertices finished!
+this round took 709.705 s
+158000 vertices finished!
+this round took 709.724 s
+160000 vertices finished!
+this round took 709.749 s
+162000 vertices finished!
+this round took 709.826 s
+164000 vertices finished!
+this round took 709.887 s
+166000 vertices finished!
+this round took 709.939 s
+168000 vertices finished!
+this round took 709.986 s
+170000 vertices finished!
+this round took 710.071 s
+172000 vertices finished!
+this round took 710.142 s
+174000 vertices finished!
+this round took 710.232 s
+176000 vertices finished!
+this round took 710.284 s
+178000 vertices finished!
+this round took 710.344 s
+180000 vertices finished!
+this round took 710.428 s
+182000 vertices finished!
+this round took 710.51 s
+184000 vertices finished!
+this round took 710.59 s
+186000 vertices finished!
+this round took 710.644 s
+188000 vertices finished!
+this round took 710.677 s
+190000 vertices finished!
+this round took 710.742 s
+192000 vertices finished!
+this round took 710.813 s
+194000 vertices finished!
+this round took 710.907 s
+196000 vertices finished!
+this round took 710.998 s
+198000 vertices finished!
+this round took 711.033 s
+200000 vertices finished!
+this round took 711.098 s
+202000 vertices finished!
+this round took 711.167 s
+204000 vertices finished!
+this round took 711.249 s
+206000 vertices finished!
+this round took 711.31 s
+208000 vertices finished!
+this round took 711.412 s
+210000 vertices finished!
+this round took 711.485 s
+212000 vertices finished!
+this round took 711.549 s
+214000 vertices finished!
+this round took 711.628 s
+216000 vertices finished!
+this round took 711.696 s
+218000 vertices finished!
+this round took 711.776 s
+220000 vertices finished!
+this round took 711.845 s
+222000 vertices finished!
+this round took 711.902 s
+224000 vertices finished!
+this round took 711.983 s
+226000 vertices finished!
+this round took 712.039 s
+228000 vertices finished!
+this round took 712.111 s
+230000 vertices finished!
+this round took 712.189 s
+232000 vertices finished!
+this round took 712.246 s
+234000 vertices finished!
+this round took 712.298 s
+236000 vertices finished!
+this round took 712.356 s
+238000 vertices finished!
+this round took 712.409 s
+240000 vertices finished!
+this round took 712.475 s
+242000 vertices finished!
+this round took 712.519 s
+244000 vertices finished!
+this round took 712.554 s
+246000 vertices finished!
+this round took 712.584 s
+248000 vertices finished!
+this round took 712.617 s
+250000 vertices finished!
+this round took 712.65 s
+252000 vertices finished!
+this round took 712.691 s
+254000 vertices finished!
+this round took 712.723 s
+256000 vertices finished!
+this round took 712.761 s
+258000 vertices finished!
+this round took 712.816 s
+260000 vertices finished!
+this round took 712.849 s
+262000 vertices finished!
+this round took 712.891 s
+264000 vertices finished!
+this round took 712.926 s
+266000 vertices finished!
+this round took 712.983 s
+268000 vertices finished!
+this round took 713.012 s
+270000 vertices finished!
+this round took 713.05 s
+272000 vertices finished!
+this round took 713.071 s
+274000 vertices finished!
+this round took 713.106 s
+276000 vertices finished!
+this round took 713.145 s
+278000 vertices finished!
+this round took 713.184 s
+280000 vertices finished!
+this round took 713.222 s
+282000 vertices finished!
+this round took 713.262 s
+284000 vertices finished!
+this round took 713.302 s
+286000 vertices finished!
+this round took 713.342 s
+288000 vertices finished!
+this round took 713.381 s
+290000 vertices finished!
+this round took 713.415 s
+292000 vertices finished!
+this round took 713.439 s
+294000 vertices finished!
+this round took 713.465 s
+296000 vertices finished!
+this round took 713.491 s
+298000 vertices finished!
+this round took 713.537 s
+300000 vertices finished!
+this round took 713.577 s
+302000 vertices finished!
+this round took 713.612 s
+304000 vertices finished!
+this round took 713.65 s
+306000 vertices finished!
+this round took 713.691 s
+308000 vertices finished!
+this round took 713.737 s
+310000 vertices finished!
+this round took 713.773 s
+312000 vertices finished!
+this round took 713.797 s
+314000 vertices finished!
+this round took 713.818 s
+316000 vertices finished!
+this round took 713.832 s
+318000 vertices finished!
+this round took 713.865 s
+320000 vertices finished!
+this round took 713.898 s
+322000 vertices finished!
+this round took 713.947 s
+324000 vertices finished!
+this round took 713.985 s
+326000 vertices finished!
+this round took 714.021 s
+328000 vertices finished!
+this round took 714.063 s
+330000 vertices finished!
+this round took 714.104 s
+332000 vertices finished!
+this round took 714.138 s
+334000 vertices finished!
+this round took 714.183 s
+336000 vertices finished!
+this round took 714.227 s
+338000 vertices finished!
+this round took 714.261 s
+340000 vertices finished!
+this round took 714.276 s
+342000 vertices finished!
+this round took 714.288 s
+344000 vertices finished!
+this round took 714.298 s
+346000 vertices finished!
+this round took 714.316 s
+348000 vertices finished!
+this round took 714.336 s
+350000 vertices finished!
+this round took 714.347 s
+352000 vertices finished!
+this round took 714.365 s
+354000 vertices finished!
+this round took 714.378 s
+356000 vertices finished!
+this round took 714.398 s
+358000 vertices finished!
+this round took 714.408 s
+360000 vertices finished!
+this round took 714.418 s
+362000 vertices finished!
+this round took 714.437 s
+364000 vertices finished!
+this round took 714.453 s
+366000 vertices finished!
+this round took 714.468 s
+368000 vertices finished!
+this round took 714.478 s
+370000 vertices finished!
+this round took 714.491 s
+372000 vertices finished!
+this round took 714.506 s
+374000 vertices finished!
+this round took 714.523 s
+376000 vertices finished!
+this round took 714.547 s
+378000 vertices finished!
+this round took 714.559 s
+380000 vertices finished!
+this round took 714.572 s
+382000 vertices finished!
+this round took 714.586 s
+384000 vertices finished!
+this round took 714.599 s
+386000 vertices finished!
+this round took 714.614 s
+388000 vertices finished!
+this round took 714.623 s
+390000 vertices finished!
+this round took 714.64 s
+392000 vertices finished!
+this round took 714.651 s
+394000 vertices finished!
+this round took 714.666 s
+396000 vertices finished!
+this round took 714.685 s
+398000 vertices finished!
+this round took 714.699 s
+400000 vertices finished!
+this round took 714.714 s
+402000 vertices finished!
+this round took 714.727 s
+404000 vertices finished!
+this round took 714.744 s
+406000 vertices finished!
+this round took 714.759 s
+408000 vertices finished!
+this round took 714.774 s
+410000 vertices finished!
+this round took 714.79 s
+412000 vertices finished!
+this round took 714.805 s
+414000 vertices finished!
+this round took 714.823 s
+416000 vertices finished!
+this round took 714.841 s
+418000 vertices finished!
+this round took 714.859 s
+420000 vertices finished!
+this round took 714.884 s
+422000 vertices finished!
+this round took 714.913 s
+424000 vertices finished!
+this round took 714.951 s
+426000 vertices finished!
+this round took 714.978 s
+428000 vertices finished!
+this round took 714.998 s
+430000 vertices finished!
+this round took 715.026 s
+432000 vertices finished!
+this round took 715.049 s
+434000 vertices finished!
+this round took 715.067 s
+436000 vertices finished!
+this round took 715.085 s
+438000 vertices finished!
+this round took 715.106 s
+440000 vertices finished!
+this round took 715.126 s
+442000 vertices finished!
+this round took 715.148 s
+444000 vertices finished!
+this round took 715.169 s
+446000 vertices finished!
+this round took 715.199 s
+448000 vertices finished!
+this round took 715.222 s
+450000 vertices finished!
+this round took 715.242 s
+452000 vertices finished!
+this round took 715.268 s
+454000 vertices finished!
+this round took 715.296 s
+456000 vertices finished!
+this round took 715.319 s
+458000 vertices finished!
+this round took 715.344 s
+460000 vertices finished!
+this round took 715.365 s
+462000 vertices finished!
+this round took 715.386 s
+464000 vertices finished!
+this round took 715.411 s
+466000 vertices finished!
+this round took 715.431 s
+468000 vertices finished!
+this round took 715.461 s
+470000 vertices finished!
+this round took 715.491 s
+472000 vertices finished!
+this round took 715.516 s
+474000 vertices finished!
+this round took 715.536 s
+476000 vertices finished!
+this round took 715.557 s
+478000 vertices finished!
+this round took 715.576 s
+480000 vertices finished!
+this round took 715.592 s
+482000 vertices finished!
+this round took 715.61 s
+484000 vertices finished!
+this round took 715.628 s
+486000 vertices finished!
+this round took 715.653 s
+488000 vertices finished!
+this round took 715.678 s
+490000 vertices finished!
+this round took 715.7 s
+492000 vertices finished!
+this round took 715.718 s
+494000 vertices finished!
+this round took 715.74 s
+496000 vertices finished!
+this round took 715.77 s
+498000 vertices finished!
+this round took 715.794 s
+500000 vertices finished!
+this round took 715.82 s
+502000 vertices finished!
+this round took 715.844 s
+504000 vertices finished!
+this round took 715.867 s
+506000 vertices finished!
+this round took 715.888 s
+508000 vertices finished!
+this round took 715.913 s
+510000 vertices finished!
+this round took 715.935 s
+512000 vertices finished!
+this round took 715.953 s
+514000 vertices finished!
+this round took 715.977 s
+516000 vertices finished!
+this round took 715.994 s
+518000 vertices finished!
+this round took 716.012 s
+520000 vertices finished!
+this round took 716.031 s
+522000 vertices finished!
+this round took 716.05 s
+524000 vertices finished!
+this round took 716.073 s
+526000 vertices finished!
+this round took 716.102 s
+528000 vertices finished!
+this round took 716.131 s
+530000 vertices finished!
+this round took 716.15 s
+532000 vertices finished!
+this round took 716.169 s
+534000 vertices finished!
+this round took 716.187 s
+536000 vertices finished!
+this round took 716.206 s
+538000 vertices finished!
+this round took 716.234 s
+540000 vertices finished!
+this round took 716.256 s
+542000 vertices finished!
+this round took 716.279 s
+544000 vertices finished!
+this round took 716.306 s
+546000 vertices finished!
+this round took 716.326 s
+548000 vertices finished!
+this round took 716.343 s
+550000 vertices finished!
+this round took 716.359 s
+552000 vertices finished!
+this round took 716.372 s
+554000 vertices finished!
+this round took 716.383 s
+556000 vertices finished!
+this round took 716.4 s
+558000 vertices finished!
+this round took 716.419 s
+560000 vertices finished!
+this round took 716.438 s
+562000 vertices finished!
+this round took 716.46 s
+564000 vertices finished!
+this round took 716.484 s
+566000 vertices finished!
+this round took 716.511 s
+568000 vertices finished!
+this round took 716.536 s
+570000 vertices finished!
+this round took 716.562 s
+572000 vertices finished!
+this round took 716.584 s
+574000 vertices finished!
+this round took 716.607 s
+576000 vertices finished!
+this round took 716.632 s
+578000 vertices finished!
+this round took 716.652 s
+580000 vertices finished!
+this round took 716.673 s
+582000 vertices finished!
+this round took 716.695 s
+584000 vertices finished!
+this round took 716.716 s
+586000 vertices finished!
+this round took 716.734 s
+588000 vertices finished!
+this round took 716.767 s
+590000 vertices finished!
+this round took 716.794 s
+592000 vertices finished!
+this round took 716.818 s
+594000 vertices finished!
+this round took 716.84 s
+596000 vertices finished!
+this round took 716.861 s
+598000 vertices finished!
+this round took 716.869 s
+600000 vertices finished!
+this round took 716.876 s
+602000 vertices finished!
+this round took 716.884 s
+604000 vertices finished!
+this round took 716.893 s
+606000 vertices finished!
+this round took 716.9 s
+608000 vertices finished!
+this round took 716.906 s
+610000 vertices finished!
+this round took 716.912 s
+612000 vertices finished!
+this round took 716.918 s
+614000 vertices finished!
+this round took 716.924 s
+616000 vertices finished!
+this round took 716.929 s
+618000 vertices finished!
+this round took 716.935 s
+620000 vertices finished!
+this round took 716.941 s
+622000 vertices finished!
+this round took 716.947 s
+624000 vertices finished!
+this round took 716.953 s
+626000 vertices finished!
+this round took 716.96 s
+628000 vertices finished!
+this round took 716.969 s
+630000 vertices finished!
+this round took 716.976 s
+632000 vertices finished!
+this round took 716.983 s
+634000 vertices finished!
+this round took 716.992 s
+636000 vertices finished!
+this round took 717.002 s
+638000 vertices finished!
+this round took 717.009 s
+640000 vertices finished!
+this round took 717.015 s
+642000 vertices finished!
+this round took 717.023 s
+644000 vertices finished!
+this round took 717.029 s
+646000 vertices finished!
+this round took 717.035 s
+648000 vertices finished!
+this round took 717.045 s
+650000 vertices finished!
+this round took 717.052 s
+652000 vertices finished!
+this round took 717.059 s
+654000 vertices finished!
+this round took 717.069 s
+656000 vertices finished!
+this round took 717.077 s
+658000 vertices finished!
+this round took 717.085 s
+660000 vertices finished!
+this round took 717.092 s
+662000 vertices finished!
+this round took 717.098 s
+664000 vertices finished!
+this round took 717.105 s
+666000 vertices finished!
+this round took 717.11 s
+668000 vertices finished!
+this round took 717.116 s
+670000 vertices finished!
+this round took 717.122 s
+672000 vertices finished!
+this round took 717.128 s
+674000 vertices finished!
+this round took 717.136 s
+676000 vertices finished!
+this round took 717.143 s
+678000 vertices finished!
+this round took 717.149 s
+680000 vertices finished!
+this round took 717.156 s
+682000 vertices finished!
+this round took 717.163 s
+684000 vertices finished!
+this round took 717.169 s
+686000 vertices finished!
+this round took 717.174 s
+688000 vertices finished!
+this round took 717.181 s
+690000 vertices finished!
+this round took 717.188 s
+692000 vertices finished!
+this round took 717.196 s
+694000 vertices finished!
+this round took 717.204 s
+696000 vertices finished!
+this round took 717.212 s
+698000 vertices finished!
+this round took 717.219 s
+700000 vertices finished!
+this round took 717.226 s
+702000 vertices finished!
+this round took 717.233 s
+704000 vertices finished!
+this round took 717.239 s
+706000 vertices finished!
+this round took 717.246 s
+708000 vertices finished!
+this round took 717.252 s
+710000 vertices finished!
+this round took 717.257 s
+712000 vertices finished!
+this round took 717.264 s
+714000 vertices finished!
+this round took 717.271 s
+716000 vertices finished!
+this round took 717.278 s
+718000 vertices finished!
+this round took 717.282 s
+720000 vertices finished!
+this round took 717.288 s
+722000 vertices finished!
+this round took 717.293 s
+724000 vertices finished!
+this round took 717.298 s
+726000 vertices finished!
+this round took 717.304 s
+728000 vertices finished!
+this round took 717.311 s
+730000 vertices finished!
+this round took 717.318 s
+732000 vertices finished!
+this round took 717.326 s
+734000 vertices finished!
+this round took 717.336 s
+736000 vertices finished!
+this round took 717.343 s
+738000 vertices finished!
+this round took 717.349 s
+740000 vertices finished!
+this round took 717.355 s
+742000 vertices finished!
+this round took 717.361 s
+744000 vertices finished!
+this round took 717.367 s
+746000 vertices finished!
+this round took 717.374 s
+748000 vertices finished!
+this round took 717.381 s
+750000 vertices finished!
+this round took 717.389 s
+752000 vertices finished!
+this round took 717.396 s
+754000 vertices finished!
+this round took 717.401 s
+756000 vertices finished!
+this round took 717.408 s
+758000 vertices finished!
+this round took 717.415 s
+760000 vertices finished!
+this round took 717.421 s
+762000 vertices finished!
+this round took 717.425 s
+764000 vertices finished!
+this round took 717.431 s
+766000 vertices finished!
+this round took 717.435 s
+768000 vertices finished!
+this round took 717.439 s
+770000 vertices finished!
+this round took 717.443 s
+772000 vertices finished!
+this round took 717.447 s
+774000 vertices finished!
+this round took 717.453 s
+776000 vertices finished!
+this round took 717.459 s
+778000 vertices finished!
+this round took 717.465 s
+780000 vertices finished!
+this round took 717.472 s
+782000 vertices finished!
+this round took 717.479 s
+784000 vertices finished!
+this round took 717.487 s
+786000 vertices finished!
+this round took 717.497 s
+788000 vertices finished!
+this round took 717.503 s
+790000 vertices finished!
+this round took 717.51 s
+792000 vertices finished!
+this round took 717.519 s
+794000 vertices finished!
+this round took 717.526 s
+796000 vertices finished!
+this round took 717.534 s
+798000 vertices finished!
+this round took 717.541 s
+800000 vertices finished!
+this round took 717.548 s
+802000 vertices finished!
+this round took 717.554 s
+804000 vertices finished!
+this round took 717.561 s
+806000 vertices finished!
+this round took 717.568 s
+808000 vertices finished!
+this round took 717.575 s
+810000 vertices finished!
+this round took 717.581 s
+812000 vertices finished!
+this round took 717.587 s
+814000 vertices finished!
+this round took 717.596 s
+816000 vertices finished!
+this round took 717.604 s
+818000 vertices finished!
+this round took 717.612 s
+820000 vertices finished!
+this round took 717.619 s
+822000 vertices finished!
+this round took 717.625 s
+824000 vertices finished!
+this round took 717.632 s
+826000 vertices finished!
+this round took 717.639 s
+828000 vertices finished!
+this round took 717.646 s
+830000 vertices finished!
+this round took 717.654 s
+832000 vertices finished!
+this round took 717.662 s
+834000 vertices finished!
+this round took 717.67 s
+836000 vertices finished!
+this round took 717.678 s
+838000 vertices finished!
+this round took 717.687 s
+840000 vertices finished!
+this round took 717.695 s
+842000 vertices finished!
+this round took 717.703 s
+844000 vertices finished!
+this round took 717.711 s
+846000 vertices finished!
+this round took 717.72 s
+848000 vertices finished!
+this round took 717.729 s
+850000 vertices finished!
+this round took 717.737 s
+852000 vertices finished!
+this round took 717.744 s
+854000 vertices finished!
+this round took 717.751 s
+856000 vertices finished!
+this round took 717.76 s
+858000 vertices finished!
+this round took 717.768 s
+860000 vertices finished!
+this round took 717.776 s
+862000 vertices finished!
+this round took 717.781 s
+864000 vertices finished!
+this round took 717.783 s
+866000 vertices finished!
+this round took 717.785 s
+868000 vertices finished!
+this round took 717.788 s
+870000 vertices finished!
+this round took 717.792 s
+872000 vertices finished!
+this round took 717.794 s
+874000 vertices finished!
+this round took 717.797 s
+876000 vertices finished!
+this round took 717.799 s
+878000 vertices finished!
+this round took 717.802 s
+880000 vertices finished!
+this round took 717.805 s
+882000 vertices finished!
+this round took 717.807 s
+884000 vertices finished!
+this round took 717.81 s
+886000 vertices finished!
+this round took 717.813 s
+888000 vertices finished!
+this round took 717.816 s
+890000 vertices finished!
+this round took 717.818 s
+892000 vertices finished!
+this round took 717.821 s
+894000 vertices finished!
+this round took 717.823 s
+896000 vertices finished!
+this round took 717.826 s
+898000 vertices finished!
+this round took 717.829 s
+900000 vertices finished!
+this round took 717.831 s
+902000 vertices finished!
+this round took 717.834 s
+904000 vertices finished!
+this round took 717.837 s
+906000 vertices finished!
+this round took 717.839 s
+908000 vertices finished!
+this round took 717.842 s
+910000 vertices finished!
+this round took 717.845 s
+912000 vertices finished!
+this round took 717.848 s
+914000 vertices finished!
+this round took 717.85 s
+916000 vertices finished!
+this round took 717.853 s
+918000 vertices finished!
+this round took 717.856 s
+920000 vertices finished!
+this round took 717.859 s
+922000 vertices finished!
+this round took 717.862 s
+924000 vertices finished!
+this round took 717.864 s
+926000 vertices finished!
+this round took 717.867 s
+928000 vertices finished!
+this round took 717.87 s
+930000 vertices finished!
+this round took 717.872 s
+932000 vertices finished!
+this round took 717.875 s
+934000 vertices finished!
+this round took 717.877 s
+936000 vertices finished!
+this round took 717.88 s
+938000 vertices finished!
+this round took 717.883 s
+940000 vertices finished!
+this round took 717.886 s
+942000 vertices finished!
+this round took 717.889 s
+944000 vertices finished!
+this round took 717.891 s
+946000 vertices finished!
+this round took 717.894 s
+948000 vertices finished!
+this round took 717.896 s
+950000 vertices finished!
+this round took 717.899 s
+952000 vertices finished!
+this round took 717.902 s
+954000 vertices finished!
+this round took 717.905 s
+956000 vertices finished!
+this round took 717.908 s
+958000 vertices finished!
+this round took 717.911 s
+960000 vertices finished!
+this round took 717.914 s
+962000 vertices finished!
+this round took 717.917 s
+964000 vertices finished!
+this round took 717.92 s
+966000 vertices finished!
+this round took 717.922 s
+968000 vertices finished!
+this round took 717.925 s
+970000 vertices finished!
+this round took 717.928 s
+972000 vertices finished!
+this round took 717.93 s
+974000 vertices finished!
+this round took 717.933 s
+976000 vertices finished!
+this round took 717.935 s
+978000 vertices finished!
+this round took 717.938 s
+980000 vertices finished!
+this round took 717.941 s
+982000 vertices finished!
+this round took 717.944 s
+984000 vertices finished!
+this round took 717.947 s
+986000 vertices finished!
+this round took 717.949 s
+988000 vertices finished!
+this round took 717.953 s
+990000 vertices finished!
+this round took 717.955 s
+992000 vertices finished!
+this round took 717.958 s
+994000 vertices finished!
+this round took 717.961 s
+996000 vertices finished!
+this round took 717.964 s
+998000 vertices finished!
+this round took 717.966 s
+1000000 vertices finished!
+this round took 717.969 s
+1002000 vertices finished!
+this round took 717.972 s
+1004000 vertices finished!
+this round took 717.975 s
+1006000 vertices finished!
+this round took 717.977 s
+1008000 vertices finished!
+this round took 717.98 s
+1010000 vertices finished!
+this round took 717.983 s
+1012000 vertices finished!
+this round took 717.985 s
+1014000 vertices finished!
+this round took 717.988 s
+1016000 vertices finished!
+this round took 717.99 s
+1018000 vertices finished!
+this round took 717.992 s
+1020000 vertices finished!
+this round took 717.994 s
+1022000 vertices finished!
+this round took 717.996 s
+1024000 vertices finished!
+this round took 717.998 s
+1026000 vertices finished!
+this round took 718.001 s
+1028000 vertices finished!
+this round took 718.003 s
+1030000 vertices finished!
+this round took 718.006 s
+1032000 vertices finished!
+this round took 718.009 s
+1034000 vertices finished!
+this round took 718.011 s
+1036000 vertices finished!
+this round took 718.014 s
+1038000 vertices finished!
+this round took 718.017 s
+1040000 vertices finished!
+this round took 718.021 s
+1042000 vertices finished!
+this round took 718.023 s
+1044000 vertices finished!
+this round took 718.026 s
+1046000 vertices finished!
+this round took 718.029 s
+1048000 vertices finished!
+this round took 718.032 s
+1050000 vertices finished!
+this round took 718.034 s
+1052000 vertices finished!
+this round took 718.037 s
+1054000 vertices finished!
+this round took 718.04 s
+1056000 vertices finished!
+this round took 718.042 s
+1058000 vertices finished!
+this round took 718.045 s
+1060000 vertices finished!
+this round took 718.048 s
+1062000 vertices finished!
+this round took 718.051 s
+1064000 vertices finished!
+this round took 718.054 s
+1066000 vertices finished!
+this round took 718.057 s
+1068000 vertices finished!
+this round took 718.06 s
+1070000 vertices finished!
+this round took 718.063 s
+build index: 718.063 s
+--------------Details of Index Occupation-------------
+labeling v, offset, labeling d, labeling w: 236418789, 237489165, 377134324, 377134324
+total number of unsigned ints in the index: 1228176602
+Complete!
+	Command being timed: "timeout 50h ./wcsd_520 road_networks/FLA_tree V6 10 1"
+	User time (seconds): 721.58
+	System time (seconds): 2.83
+	Percent of CPU this job got: 99%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 12:04.54
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 4978872
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 1281125
+	Voluntary context switches: 9
+	Involuntary context switches: 3553
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 184
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

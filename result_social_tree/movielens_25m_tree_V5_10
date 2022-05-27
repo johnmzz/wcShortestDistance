@@ -1,0 +1,51 @@
+Perform tree decomposition for the first 70% of verties.
+
+Start tree decomposition...
+
+decomposing vertex 5000, time: 0.005 s
+decomposing vertex 10000, time: 0.005 s
+decomposing vertex 15000, time: 0.015 s
+decomposing vertex 20000, time: 0.015 s
+decomposing vertex 25000, time: 0.025 s
+decomposing vertex 30000, time: 0.06 s
+decomposing vertex 35000, time: 0.115 s
+decomposing vertex 40000, time: 0.56 s
+decomposing vertex 45000, time: 0.59 s
+decomposing vertex 50000, time: 0.43 s
+decomposing vertex 55000, time: 0.58 s
+decomposing vertex 60000, time: 0.795 s
+decomposing vertex 65000, time: 0.97 s
+decomposing vertex 70000, time: 1.19 s
+decomposing vertex 75000, time: 1.24 s
+decomposing vertex 80000, time: 1.19 s
+decomposing vertex 85000, time: 1.12 s
+decomposing vertex 90000, time: 2.095 s
+decomposing vertex 95000, time: 1.06 s
+decomposing vertex 100000, time: 1.42 s
+decomposing vertex 105000, time: 2.72 s
+decomposing vertex 110000, time: 5.215 s
+decomposing vertex 115000, time: 2.515 s
+decomposing vertex 120000, time: 3.76 s
+decomposing vertex 125000, time: 5.045 s
+decomposing vertex 130000, time: 8.78 s
+decomposing vertex 135000, time: 11.37 s
+decomposing vertex 140000, time: 5.38 s
+decomposing vertex 145000, time: 5.725 s
+decomposing vertex 150000, time: 14.6 s
+decomposing vertex 155000, time: 12.535 s
+Finishing tree decomposition at count = 155112
+Constructing new graph...
+Finished tree decomposition, total time = 98.4564 s
+
+the number of vertices: 221588
+the number of edges: 25000095
+the number of weights: 6
+the maximum weight value: 5
+the maximum degree: 81491
+use V5 for first 10% vertices..., which is 22158
+0 vertices finished!
+this round took 0.412261 s
+2000 vertices finished!
+this round took 962.537 s
+4000 vertices finished!
+this round took 1942.96 s

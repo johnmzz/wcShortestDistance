@@ -19,8 +19,10 @@
 using namespace std;
 
 typedef vector<vector<uint32_t> > AdjList;
+typedef vector<vector<uint8_t>> WeightList;
 // typedef vector<uint32_t> WeightList;
 #define INVALID_VALUE 0xffffffff
+#define INVALID_VALUE_8bit 0xff
 #define INF 0xffffffff
 
 struct descWeightSort

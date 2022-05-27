@@ -1,0 +1,183 @@
+Perform tree decomposition for the first 70% of verties.
+
+Start tree decomposition...
+
+decomposing vertex 5000, time: 0.005 s
+decomposing vertex 10000, time: 0 s
+decomposing vertex 15000, time: 0 s
+decomposing vertex 20000, time: 0.005 s
+decomposing vertex 25000, time: 0.005 s
+decomposing vertex 30000, time: 0.005 s
+decomposing vertex 35000, time: 0.005 s
+decomposing vertex 40000, time: 0.005 s
+decomposing vertex 45000, time: 0.01 s
+decomposing vertex 50000, time: 0.01 s
+decomposing vertex 55000, time: 0.01 s
+decomposing vertex 60000, time: 0.005 s
+decomposing vertex 65000, time: 0.005 s
+decomposing vertex 70000, time: 0.025 s
+decomposing vertex 75000, time: 0.02 s
+decomposing vertex 80000, time: 0.015 s
+decomposing vertex 85000, time: 0.01 s
+decomposing vertex 90000, time: 0.01 s
+decomposing vertex 95000, time: 0.01 s
+decomposing vertex 100000, time: 0.005 s
+decomposing vertex 105000, time: 0.035 s
+decomposing vertex 110000, time: 0.025 s
+decomposing vertex 115000, time: 0.005 s
+decomposing vertex 120000, time: 0.015 s
+decomposing vertex 125000, time: 0.015 s
+decomposing vertex 130000, time: 0.01 s
+decomposing vertex 135000, time: 0.055 s
+decomposing vertex 140000, time: 0.03 s
+decomposing vertex 145000, time: 0.02 s
+decomposing vertex 150000, time: 0.01 s
+decomposing vertex 155000, time: 0.01 s
+decomposing vertex 160000, time: 0.065 s
+decomposing vertex 165000, time: 0.05 s
+decomposing vertex 170000, time: 0.005 s
+decomposing vertex 175000, time: 0.05 s
+decomposing vertex 180000, time: 0.03 s
+decomposing vertex 185000, time: 0.01 s
+decomposing vertex 190000, time: 0.035 s
+decomposing vertex 195000, time: 0.01 s
+decomposing vertex 200000, time: 0.045 s
+decomposing vertex 205000, time: 0.02 s
+decomposing vertex 210000, time: 0.065 s
+decomposing vertex 215000, time: 0.02 s
+decomposing vertex 220000, time: 0.01 s
+decomposing vertex 225000, time: 0.025 s
+decomposing vertex 230000, time: 0.035 s
+decomposing vertex 235000, time: 0.105 s
+decomposing vertex 240000, time: 0.065 s
+decomposing vertex 245000, time: 0.045 s
+decomposing vertex 250000, time: 0.025 s
+decomposing vertex 255000, time: 0.005 s
+decomposing vertex 260000, time: 0.235 s
+decomposing vertex 265000, time: 0.165 s
+decomposing vertex 270000, time: 0.095 s
+decomposing vertex 275000, time: 0.04 s
+decomposing vertex 280000, time: 0.01 s
+decomposing vertex 285000, time: 0.02 s
+decomposing vertex 290000, time: 0.135 s
+decomposing vertex 295000, time: 0.04 s
+decomposing vertex 300000, time: 0.185 s
+decomposing vertex 305000, time: 0.155 s
+decomposing vertex 310000, time: 0.02 s
+decomposing vertex 315000, time: 0.075 s
+decomposing vertex 320000, time: 0.07 s
+decomposing vertex 325000, time: 0.05 s
+decomposing vertex 330000, time: 0.055 s
+decomposing vertex 335000, time: 0.05 s
+decomposing vertex 340000, time: 0.13 s
+decomposing vertex 345000, time: 0.065 s
+decomposing vertex 350000, time: 0.15 s
+decomposing vertex 355000, time: 0.175 s
+decomposing vertex 360000, time: 0.085 s
+decomposing vertex 365000, time: 0.22 s
+decomposing vertex 370000, time: 0.46 s
+decomposing vertex 375000, time: 0.09 s
+decomposing vertex 380000, time: 0.135 s
+decomposing vertex 385000, time: 0.07 s
+decomposing vertex 390000, time: 0.255 s
+decomposing vertex 395000, time: 0.19 s
+decomposing vertex 400000, time: 0.02 s
+decomposing vertex 405000, time: 0.035 s
+decomposing vertex 410000, time: 0.1 s
+decomposing vertex 415000, time: 0.35 s
+decomposing vertex 420000, time: 0.05 s
+decomposing vertex 425000, time: 0.355 s
+decomposing vertex 430000, time: 0.06 s
+decomposing vertex 435000, time: 0.285 s
+decomposing vertex 440000, time: 0.045 s
+decomposing vertex 445000, time: 0.08 s
+decomposing vertex 450000, time: 0.13 s
+decomposing vertex 455000, time: 0.26 s
+decomposing vertex 460000, time: 0.105 s
+decomposing vertex 465000, time: 0.045 s
+decomposing vertex 470000, time: 0.105 s
+decomposing vertex 475000, time: 0.73 s
+decomposing vertex 480000, time: 0.135 s
+decomposing vertex 485000, time: 0.395 s
+decomposing vertex 490000, time: 0.3 s
+decomposing vertex 495000, time: 0.095 s
+decomposing vertex 500000, time: 0.5 s
+decomposing vertex 505000, time: 0.055 s
+decomposing vertex 510000, time: 0.045 s
+decomposing vertex 515000, time: 0.38 s
+decomposing vertex 520000, time: 0.335 s
+decomposing vertex 525000, time: 0.48 s
+decomposing vertex 530000, time: 0.065 s
+decomposing vertex 535000, time: 0.11 s
+decomposing vertex 540000, time: 0.175 s
+decomposing vertex 545000, time: 0.5 s
+decomposing vertex 550000, time: 0.835 s
+decomposing vertex 555000, time: 0.78 s
+decomposing vertex 560000, time: 0.695 s
+decomposing vertex 565000, time: 0.135 s
+decomposing vertex 570000, time: 0.175 s
+decomposing vertex 575000, time: 0.1 s
+decomposing vertex 580000, time: 0.47 s
+decomposing vertex 585000, time: 0.675 s
+decomposing vertex 590000, time: 0.27 s
+decomposing vertex 595000, time: 0.235 s
+decomposing vertex 600000, time: 1.06 s
+decomposing vertex 605000, time: 0.175 s
+decomposing vertex 610000, time: 0.845 s
+decomposing vertex 615000, time: 0.05 s
+decomposing vertex 620000, time: 1.5 s
+decomposing vertex 625000, time: 0.035 s
+decomposing vertex 630000, time: 0.275 s
+decomposing vertex 635000, time: 0.195 s
+decomposing vertex 640000, time: 0.17 s
+decomposing vertex 645000, time: 0.41 s
+decomposing vertex 650000, time: 0.705 s
+decomposing vertex 655000, time: 0.325 s
+decomposing vertex 660000, time: 1.37 s
+decomposing vertex 665000, time: 0.195 s
+decomposing vertex 670000, time: 0.365 s
+decomposing vertex 675000, time: 1.46 s
+decomposing vertex 680000, time: 1.325 s
+decomposing vertex 685000, time: 0.235 s
+decomposing vertex 690000, time: 0.575 s
+decomposing vertex 695000, time: 0.15 s
+decomposing vertex 700000, time: 2.27 s
+decomposing vertex 705000, time: 2.49 s
+decomposing vertex 710000, time: 0.255 s
+decomposing vertex 715000, time: 0.255 s
+decomposing vertex 720000, time: 0.215 s
+decomposing vertex 725000, time: 0.46 s
+decomposing vertex 730000, time: 0.1 s
+decomposing vertex 735000, time: 2.735 s
+decomposing vertex 740000, time: 3.405 s
+decomposing vertex 745000, time: 0.615 s
+decomposing vertex 750000, time: 0.405 s
+decomposing vertex 755000, time: 0.36 s
+decomposing vertex 760000, time: 4.595 s
+decomposing vertex 765000, time: 0.05 s
+decomposing vertex 770000, time: 4.19 s
+decomposing vertex 775000, time: 0.095 s
+decomposing vertex 780000, time: 0.26 s
+decomposing vertex 785000, time: 1.215 s
+decomposing vertex 790000, time: 3.05 s
+decomposing vertex 795000, time: 1.765 s
+Finishing tree decomposition at count = 797934
+Constructing new graph...
+Finished tree decomposition, total time = 71.6305 s
+
+the number of vertices: 1139905
+the number of edges: 56375711
+the number of weights: 3
+the maximum weight value: 3
+the maximum degree: 11467
+use V8 for first 10% vertices..., which is 113990
+0 vertices finished!
+this round took 1.36347 s
+2000 vertices finished!
+this round took 11314.6 s
+4000 vertices finished!
+this round took 27056.6 s
+6000 vertices finished!
+this round took 43477 s
+8000 vertices finished!
+this round took 58156.7 s

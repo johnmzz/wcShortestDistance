@@ -13,9 +13,9 @@ BOOST_ROOT = /import/vldb01/2/scratch/mazhuo/boost/boost_1_77_0
 # -o 			- output executable file
 # std=c++14		- use C++14 standard
 
-all: wcsd_tree_decomp_partial
-wcsd_tree_decomp_partial: main.o WGraph.o
-	g++ -Ofast  -fopenmp  main.o WGraph.o -o wcsd_tree_decomp_partial -std=c++14
+all: wcsd_tree_527
+wcsd_tree_527: main.o WGraph.o
+	g++ -Ofast  -fopenmp  main.o WGraph.o -o wcsd_527 -std=c++14
 	rm *.o
 main.o:
 	g++ -c  -Ofast  -fopenmp  $(CODE)main.cpp -I$(BOOST_ROOT) -std=c++14

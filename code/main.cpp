@@ -14,7 +14,6 @@ int main(int argc, char* argv[]) {
     string input_graph = argv[1];
     string type = argv[2];
     int threshold = stoi(argv[3]);
-    int weight_intervals = stoi(argv[4]);
 
     bool isBin = true;
 
@@ -23,18 +22,18 @@ int main(int argc, char* argv[]) {
     //g.save_graph_to_bin(data_path, input_graph);
 
     //g.sort_by_degree();
-    //g.tree_decomp();
-    g.tree_decomp_partial(0.7);
+    g.tree_decomp();
+    //g.tree_decomp_partial(0.7);
     //g.print_graph();
     g.get_graph_statistics();
     //g.check_degree_order();
 
-    // if (!isBin) g.save_graph_to_bin(data_path, input_graph);
-    if (weight_intervals > 1) g.preprocess(weight_intervals);
+    //if (!isBin) g.save_graph_to_bin(data_path, input_graph);
 
     g.build_index(type, threshold);
-    // g.print_index_pll();
+
     // if (input_graph == "mz_test") g.print_index();
+
     g.get_index_size();
 
     cout << "Complete!" << endl;
@@ -57,7 +56,7 @@ int main(int argc, char* argv[]) {
             uint32_t d1 = g.constrained_shortest_distance_naive(s, t, r, q1);
             uint32_t d2 = g.constrained_shortest_distance_dijkstra(s, t, r, q2);
             uint32_t d3 = g.constrained_shortest_distance_plus(s, t, r, q3);
-            uint32_t d4 = g.query_with_index_vertex(s, t, r, q4);
+            uint32_t d4 = g.query(s, t, r, q4);
             if (d1 != d2 || d1 != d3 || d2 != d3 || d1 != d4 || d2 != d4 || d3 != d4) {
                 cout << "ERROR: s, t, r: " << s << " " << t << " " << r << "; dist: " << d1 << " " << d2 << " " << d3 << " " << d4 << endl;
             }
@@ -77,7 +76,7 @@ int main(int argc, char* argv[]) {
         uint32_t d1 = g.constrained_shortest_distance_naive(s, t, r, q1);
         uint32_t d2 = g.constrained_shortest_distance_dijkstra(s, t, r, q2);
         uint32_t d3 = g.constrained_shortest_distance_plus(s, t, r, q3);
-        uint32_t d4 = g.query_with_index_vertex(s, t, r, q4);
+        uint32_t d4 = g.query(s, t, r, q4);
         if (d1 != d2 || d1 != d3 || d2 != d3 || d1 != d4 || d2 != d4 || d3 != d4) {
             cout << "ERROR: s, t, r: " << s << " " << t << " " << r << "; dist: " << d1 << " " << d2 << " " << d3 << " " << d4 << endl;
         }

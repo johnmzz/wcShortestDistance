@@ -11,8 +11,9 @@ WGraph::WGraph() {
 
     labeling_v = vector<vector<uint32_t>>();
     offset = vector<vector<uint32_t>>();
-    labeling_d = vector<vector<uint32_t>>();
-    labeling_w = vector<vector<uint32_t>>();
+    labeling_d = vector<vector<uint16_t>>();
+    labeling_w = vector<vector<uint8_t>>();
+    labeling_dw = vector<vector<pair<uint16_t, uint8_t>>>();
 }
 
 WGraph::WGraph(string path, string graph, bool isBin) {
@@ -123,7 +124,7 @@ void WGraph::read_edgelist(ifstream& in) {
     }
 }
 
-//////save graph to bin, bin
+// save graph to bin, bin
 void WGraph::save_graph_to_bin(string path, string file) {
     ofstream outfile(path + file + "/" + string("graph.bin"), ofstream::binary);
     if (!outfile) {
@@ -184,7 +185,7 @@ uint32_t WGraph::min_distance(vector<uint32_t>& dist, boost::dynamic_bitset<>& v
     return min_idx;
 }
 
-///// O(n^)
+// O(n^)
 uint32_t WGraph::dijkstra(AdjList& newg, uint32_t s, uint32_t t) {
     vector<uint32_t> dist = vector<uint32_t>(newg.size(), INVALID_VALUE);
     boost::dynamic_bitset<> visited(newg.size());
@@ -222,15 +223,6 @@ uint32_t WGraph::constrained_shortest_distance_naive(uint32_t s, uint32_t t, uin
             }
         }
     }
-
-    // cout << "newg is: " << endl;
-    // for (uint32_t u = 0; u < nsize; u++) {
-    //     cout << u << ":";
-    //     for (auto w: newg[u]) {
-    //         cout << " " << w;
-    //     }
-    //     cout << endl;
-    // }
 
     /// step 2: compute the shortest distance based on the filtered graph
     queue<uint32_t> myqueue;
@@ -275,14 +267,6 @@ uint32_t WGraph::constrained_shortest_distance_dijkstra(uint32_t s, uint32_t t, 
             }
         }
     }
-    // cout << "newg is: " << endl;
-    // for (uint32_t u = 0; u < nsize; u++) {
-    //     cout << u << ":";
-    //     for (auto w: newg[u]) {
-    //         cout << " " << w;
-    //     }
-    //     cout << endl;
-    // }
 
     /// step 2: compute the shortest distance based on the filtered graph
     uint32_t d = dijkstra(newg, s, t);
@@ -326,8 +310,8 @@ uint32_t WGraph::constrained_shortest_distance_plus(uint32_t s, uint32_t t, uint
     return INVALID_VALUE;
 }
 
-//// query algorithms based on the index
-uint32_t WGraph::query_with_index_vertex(uint32_t s, uint32_t t, uint32_t r, double& qtime) {
+// default query algorithm
+uint32_t WGraph::query(uint32_t s, uint32_t t, uint32_t r, double& qtime) {
     auto t1 = std::chrono::high_resolution_clock::now();
     uint32_t min_dist = INVALID_VALUE;
     uint32_t i = 0, j = 0;
@@ -405,7 +389,7 @@ uint32_t WGraph::query_with_index_vertex(uint32_t s, uint32_t t, uint32_t r, dou
     return min_dist;
 }
 
-uint32_t WGraph::query_with_index_vertex_skip(uint32_t s, uint32_t t, uint32_t r, uint32_t dpos) {
+uint32_t WGraph::query_skip(uint32_t s, uint32_t t, uint32_t r, uint32_t dpos) {
     uint32_t min_dist = INVALID_VALUE;
     uint32_t i = 0, j = 0;
 
@@ -485,10 +469,14 @@ uint32_t WGraph::query_with_index_vertex_skip(uint32_t s, uint32_t t, uint32_t r
     return min_dist;
 }
 
-uint32_t WGraph::query_while_indexing_vertex(uint32_t s, uint32_t t, uint32_t r) {
-    uint32_t min_dist = INVALID_VALUE;
-    uint32_t i = 0, j = 0;
 
+template<typename T>
+bool compare_w(const T &a,const T &b){
+    return a.second<b.second;
+}
+
+bool WGraph::query_while_indexing_vertex_V1(uint32_t s, uint32_t t, uint16_t curr_d, uint8_t r) {
+    uint32_t i = 0, j = 0;
     uint32_t isize = labeling_v[s].size();
     uint32_t jsize = labeling_v[t].size();
     while (i < isize && j < jsize) {
@@ -499,12 +487,12 @@ uint32_t WGraph::query_while_indexing_vertex(uint32_t s, uint32_t t, uint32_t r)
             j++;
         }
         else {
-            uint32_t l1 = lower_bound(labeling_w[s].begin() + offset[s][i], labeling_w[s].begin() + offset[s][i + 1], r) - labeling_w[s].begin();
+            uint32_t l1 = lower_bound(labeling_dw[s].begin() + offset[s][i], labeling_dw[s].begin() + offset[s][i + 1], make_pair(0,r), compare_w<pair<uint16_t, uint8_t>>) - labeling_dw[s].begin();
             if (l1 != offset[s][i + 1]) {
-                uint32_t l2 = lower_bound(labeling_w[t].begin() + offset[t][j], labeling_w[t].begin() + offset[t][j + 1], r) - labeling_w[t].begin();
+                uint32_t l2 = lower_bound(labeling_dw[t].begin() + offset[t][j], labeling_dw[t].begin() + offset[t][j + 1], make_pair(0,r), compare_w<pair<uint16_t, uint8_t>>) - labeling_dw[t].begin();
                 if (l2 != offset[t][j + 1]) {
-                    if (labeling_d[s][l1] + labeling_d[t][l2] < min_dist) {
-                        min_dist = labeling_d[s][l1] + labeling_d[t][l2];
+                    if (labeling_dw[s][l1].first + labeling_dw[t][l2].first <= curr_d) {
+                        return true;
                     }
                 }
             }
@@ -512,435 +500,61 @@ uint32_t WGraph::query_while_indexing_vertex(uint32_t s, uint32_t t, uint32_t r)
             j++;
         }
     }
-
-    // while (i < isize) {
-    //     if (labeling_v[s][i] == t) {
-    //         uint32_t l1 = lower_bound(labeling_w[s].begin() + offset[s][i], labeling_w[s].begin() + offset[s][i + 1], r) - labeling_w[s].begin();
-    //         if (l1 != offset[s][i + 1] && labeling_d[s][l1] < min_dist) {
-    //             min_dist = labeling_d[s][l1];
-    //         }
-    //     }
-    //     i++;
-    // }
-
-    // while (j < jsize) {
-    //     if (labeling_v[t][j] == s) {
-    //         uint32_t l2 = lower_bound(labeling_w[t].begin() + offset[t][j], labeling_w[t].begin() + offset[t][j + 1], r) - labeling_w[t].begin();
-    //         if (l2 != offset[t][j + 1] && labeling_d[t][l2] < min_dist) {
-    //             min_dist = labeling_d[t][l2];
-    //         }
-    //     }
-    //     j++;
-    // }
-    return min_dist;
+    return false;
 }
 
-////
-uint32_t WGraph::query_while_indexing_vertex_V2(uint32_t s, uint32_t t, uint32_t r, vector<vector<pair<uint32_t, uint32_t>>>& u_label) {
-    uint32_t min_dist = INVALID_VALUE;
-
-    for (uint32_t j = 0; j < labeling_v[t].size(); j++) {
-        uint32_t v = labeling_v[t][j];
+bool WGraph::query_while_indexing_vertex_V8(uint32_t s, uint32_t t, uint16_t curr_d, uint8_t r, vector<vector<pair<uint16_t, uint8_t>>>& u_label) {
+    for (uint32_t i = 0; i < labeling_v[t].size(); i++) {
+        uint32_t v = labeling_v[t][i];
 
         if (v > s) break;
 
         if (u_label[v].empty()) continue;
 
-        bool updated_flag = false;
-        for (uint32_t p = offset[t][j]; p < offset[t][j + 1]; p++) {
-            if (updated_flag == true) {
-                break;
-            }
+        uint32_t l1 = lower_bound(labeling_dw[t].begin() + offset[t][i], labeling_dw[t].begin() + offset[t][i + 1], make_pair(0,r), compare_w<pair<uint16_t, uint8_t>>) - labeling_dw[t].begin();
+        if (l1 != offset[t][i + 1]) {
+            uint32_t l2 = lower_bound(u_label[v].begin(), u_label[v].end(), make_pair(0,r), compare_w<pair<uint16_t, uint8_t>>) - u_label[v].begin();
+            if (l2 != u_label[v].size()) {
+                uint16_t d = labeling_dw[t][l1].first;
+                uint16_t u_d = u_label[v][l2].first;
 
-            uint32_t d = labeling_d[t][p];
-            uint32_t w = labeling_w[t][p];
-            if (w < r) {
-                continue;
-            }
-
-            for (uint32_t i = 0; i < u_label[v].size(); i++) {
-                if (u_label[v][i].second >= r) {
-                    if ((u_label[v][i].first + d) < min_dist) {
-                        min_dist = u_label[v][i].first + d;
-                        // update turning_point_r[t] =
-                        updated_flag = true;
-                        break;
-                    }
+                if ((u_d + d) <= curr_d) {
+                    return true;
                 }
             }
         }
     }
-    return min_dist;
-}
-
-uint32_t WGraph::query_while_indexing_vertex_V3(uint32_t s, uint32_t t, uint32_t r, vector<vector<uint32_t>>& u_label_d, vector<vector<uint32_t>>& u_label_w) {
-    // cout << "Round: s = " << s << ", t = " << t << ", r = " << r << ":" << endl;
-    uint32_t min_dist = INVALID_VALUE;
-
-    for (uint32_t j = 0; j < labeling_v[t].size(); j++) {
-        uint32_t v = labeling_v[t][j];
-
-        if (v > s) break;   // TODO: break if labeling_v[t][j] > s, because all subsequent v will be larger than current v
-
-        if (u_label_d[v].empty()) continue;
-
-        bool updated_flag = false;
-        for (uint32_t p = offset[t][j]; p < offset[t][j + 1]; p++) {
-            if (updated_flag == true) {
-                break;
-            }
-
-            uint32_t d = labeling_d[t][p];
-            uint32_t w = labeling_w[t][p];
-            if (w < r) {
-                continue;
-            }
-            /////TODO: change it to lowerbound, using binary search instead of linear search
-            /////// change it to lowerbound or uperbound function
-            for (uint32_t i = 0; i < u_label_w[v].size(); i++) {
-                if (u_label_w[v][i] >= r) {
-                    // cout << "index = " << i << ", value = " << u_label_w[v][i] << endl;
-                    if ((u_label_d[v][i] + d) < min_dist) {
-                        min_dist = u_label_d[v][i] + d;
-                        // update turning_point_r[t] =
-                        updated_flag = true;
-                        break;
-                    }
-                }
-            }
-            /*
-            vector<uint32_t>::iterator low = lower_bound(u_label_w[v].begin(), u_label_w[v].end(), r);
-            if (low != u_label_w[v].end()) {
-                // cout << "lower bound = " << (low - u_label_w[v].begin()) << ", value = " << u_label_w[v][low-u_label_w[v].begin()] << endl;
-                for (uint32_t i = (low - u_label_w[v].begin()); i != u_label_w[v].end() - u_label_w[v].begin(); i++) {
-                    if ((u_label_d[v][i] + d) < min_dist) {
-                        min_dist = u_label_d[v][i] + d;
-                        // update turning_point_r[t] =
-                        updated_flag = true;
-                        break;
-                    }
-                }
-            }
-            */
-            /*
-            vector<uint32_t>::iterator low = lower_bound(u_label_w[v].begin(), u_label_w[v].end(), r);
-            while (low != u_label_w[v].end()) {
-                if ((u_label_d[v][low-u_label_w[v].begin()] + d) < min_dist) {
-                    min_dist = u_label_d[v][low-u_label_w[v].begin()] + d;
-                    updated_flag = true;
-                    break;
-                }
-                else {
-                    r++;
-                    low = lower_bound(u_label_w[v].begin(), u_label_w[v].end(), r);
-                }
-            }
-            */
-        }
-    }
-    return min_dist;
-}
-
-uint32_t WGraph::query_while_indexing_vertex_V4(uint32_t s, uint32_t t, uint32_t r, vector<vector<pair<uint32_t, uint32_t>>>& u_label, vector<uint32_t>& turning_point_d, vector<uint32_t>& turning_point_w) {
-    uint32_t min_dist = INVALID_VALUE;
-
-    for (uint32_t j = 0; j < labeling_v[t].size(); j++) {
-        uint32_t v = labeling_v[t][j];
-
-        if (v > s) break;
-
-        if (u_label[v].empty()) continue;
-
-        bool updated_flag = false;
-        for (uint32_t p = offset[t][j]; p < offset[t][j + 1]; p++) {
-            if (updated_flag == true) {
-                break;
-            }
-
-            uint32_t d = labeling_d[t][p];
-            uint32_t w = labeling_w[t][p];
-            if (w < r) {
-                continue;
-            }
-
-            for (uint32_t i = 0; i < u_label[v].size(); i++) {
-                if (u_label[v][i].second >= r) {
-                    if ((u_label[v][i].first + d) < min_dist) {
-                        min_dist = u_label[v][i].first + d;
-                        turning_point_w[t] = min(w, u_label[v][i].second);
-                        turning_point_d[t] = min_dist;
-                        updated_flag = true;
-                        break;
-                    }
-                }
-            }
-        }
-    }
-    return min_dist;
-}
-
-uint32_t WGraph::query_while_indexing_vertex_V5(uint32_t s, uint32_t t, uint32_t r, vector<vector<pair<uint32_t, uint32_t>>>& u_label, vector<uint32_t>& turning_point_d, vector<uint32_t>& turning_point_w, vector<uint32_t>& visited_tp) {
-    uint32_t min_dist = INVALID_VALUE;
-
-    for (uint32_t j = 0; j < labeling_v[t].size(); j++) {
-        uint32_t v = labeling_v[t][j];
-
-        if (v > s) break;
-
-        if (u_label[v].empty()) continue;
-
-        bool updated_flag = false;
-        for (uint32_t p = offset[t][j]; p < offset[t][j + 1]; p++) {
-            if (updated_flag == true) {
-                break;
-            }
-
-            uint32_t d = labeling_d[t][p];
-            uint32_t w = labeling_w[t][p];
-            if (w < r) {
-                continue;
-            }
-
-            for (uint32_t i = 0; i < u_label[v].size(); i++) {
-                if (u_label[v][i].second >= r) {
-                    if ((u_label[v][i].first + d) < min_dist) {
-                        min_dist = u_label[v][i].first + d;
-                        turning_point_w[t] = min(w, u_label[v][i].second);
-                        turning_point_d[t] = min_dist;
-                        visited_tp.push_back(t);
-                        updated_flag = true;
-                        break;
-                    }
-                }
-            }
-        }
-    }
-    return min_dist;
-}
-
-// uint32_t WGraph::query_while_indexing_vertex(uint32_t s, uint32_t t, uint32_t r) {
-//     uint32_t min_dist = INVALID_VALUE;
-//     uint32_t i = 0, j = 0;
-//
-//     uint32_t isize = labeling_v[s].size();
-//     uint32_t jsize = labeling_v[t].size();
-//     while (i < isize && j < jsize) {
-//         if (labeling_v[s][i] < labeling_v[t][j]) {
-//             i++;
-//         } else if (labeling_v[s][i] > labeling_v[t][j]) {
-//             j++;
-//         } else {
-//             uint32_t d1 = INVALID_VALUE, d2 = INVALID_VALUE;
-//             for (uint32_t p = offset[s][i]; p < offset[s][i + 1]; p++) {
-//                 if (labeling_w[s][p] >= r) {
-//                     d1 = labeling_d[s][p];
-//                     break;
-//                 }
-//             }
-//             for (uint32_t q = offset[t][j]; q < offset[t][j + 1]; q++) {
-//                 if (labeling_w[t][q] >= r) {
-//                     d2 = labeling_d[t][q];
-//                     break;
-//                 }
-//             }
-//
-//             if (d1 != INVALID_VALUE && d2 != INVALID_VALUE) {
-//                 if (d1 + d2 < min_dist) { min_dist = d1 + d2; }
-//             }
-//             i++;
-//             j++;
-//         }
-//     }
-//
-//     while (i < labeling_v[s].size()) {
-//         if (labeling_v[s][i] == t) {
-//             uint32_t d1 = INVALID_VALUE;
-//             for (uint32_t p = offset[s][i]; p < offset[s][i + 1]; p++) {
-//                 if (labeling_w[s][p] >= r) {
-//                     d1 = labeling_d[s][p];
-//                     break;
-//                 }
-//             }
-//             if (d1 != INVALID_VALUE && d1 < min_dist) {
-//                 min_dist = d1;
-//             }
-//         }
-//         i++;
-//     }
-//
-//     while (j < labeling_v[t].size()) {
-//         if (labeling_v[t][j] == s) {
-//             uint32_t d2 = INVALID_VALUE;
-//             for (uint32_t q = offset[t][j]; q < offset[t][j + 1]; q++) {
-//                 if (labeling_w[t][q] >= r) {
-//                     d2 = labeling_d[t][q];
-//                     break;
-//                 }
-//             }
-//             if (d2 != INVALID_VALUE && d2 < min_dist) {
-//                 min_dist = d2;
-//             }
-//         }
-//         j++;
-//     }
-//     return min_dist;
-// }
-
-uint32_t WGraph::query_for_pll(uint32_t s, uint32_t t) {
-    uint32_t min_dist = INVALID_VALUE;
-    uint32_t i = 0, j = 0;
-
-    while (i < labeling_v[s].size() && j < labeling_v[t].size()) {
-        uint32_t curr_u = labeling_v[s][i];
-        uint32_t curr_w = labeling_v[t][j];
-        if (curr_u < curr_w) {
-            i++;
-        }
-        else if (curr_u > curr_w) {
-            j++;
-        }
-        else {
-            uint32_t d1 = labeling_d[s][i];
-            uint32_t d2 = labeling_d[t][j];
-            if (d1 + d2 < min_dist) {
-                min_dist = d1 + d2;
-            }
-            i++;
-            j++;
-        }
-    }
-
-    while (i < labeling_v[s].size()) {
-        if (labeling_v[s][i] == t) {
-            uint32_t d1 = labeling_d[s][i];
-            if (d1 < min_dist) {
-                min_dist = d1;
-            }
-        }
-        i++;
-    }
-
-    while (j < labeling_v[t].size()) {
-        if (labeling_v[t][j] == s) {
-            uint32_t d2 = labeling_d[t][j];
-            if (d2 < min_dist) {
-                min_dist = d2;
-            }
-        }
-        j++;
-    }
-    return min_dist;
+    return false;
 }
 
 void WGraph::build_index(string type, int threshold) {
     labeling_v = vector<vector<uint32_t>>(nsize);
     offset = vector<vector<uint32_t>>(nsize);
-    labeling_d = vector<vector<uint32_t>>(nsize);
-    labeling_w = vector<vector<uint32_t>>(nsize);
+    labeling_dw = vector<vector<pair<uint16_t, uint8_t>>>(nsize);
 
     for (uint32_t u = 0; u < nsize; u++) {
         offset[u].push_back(0);
     }
 
     boost::dynamic_bitset<> updated = boost::dynamic_bitset<>(nsize);
-    vector<uint32_t> visited_r = vector<uint32_t>(nsize, 0);
+    vector<uint8_t> visited_r = vector<uint8_t>(nsize, 0);
     boost::dynamic_bitset<> this_visited_flag = boost::dynamic_bitset<>(nsize);
-    vector<uint32_t> visited_d = vector<uint32_t>(nsize, INVALID_VALUE);
-
-    vector<uint32_t> turning_point_w = vector<uint32_t>(nsize, 0);
-    vector<uint32_t> turning_point_d = vector<uint32_t>(nsize, 0);
 
     clock_t start, end;
     start = clock();
-    if (type == "V0") {
-        // clock_t sss,ttt;
-        // sss = clock();
-        for (uint32_t u = 0; u < nsize; u++) {
-            vertex_prioritized_indexing(u, updated, visited_r);
-            if (u % 1000 == 0) {
-                cout << u << " vertices finished!" << endl;
-            }
-        }
-    }
-    else if (type == "V1") {
-        for (uint32_t u = 0; u < nsize; u++) {
-            vertex_prioritized_indexing_plus(u, updated, visited_r, this_visited_flag);
-            if (u % 2000 == 0) {
-                cout << u << " vertices finished!" << endl;
-                clock_t temp = clock();
-                cout << "this round took " << (float)(temp - start) / CLOCKS_PER_SEC << " s" << endl;
-            }
-        }
-    }
-    else if (type == "V2") {
-        cout << "use V2 for first " << threshold << "\% vertices..." << ", which is " << (int)(nsize*threshold/100) << endl;
+    if (type == "V8") {
+        cout << "use V8 for first " << threshold << "\% vertices..." << ", which is " << (int)(nsize*threshold/100) << endl;
         for (uint32_t u = 0; u < nsize; u++) {
             if (u < (int)(nsize*threshold/100)) {
-                vertex_prioritized_indexing_V2(u, updated, visited_r, this_visited_flag);
+                vertex_prioritized_indexing_V8(u, updated, visited_r, this_visited_flag);
             }
             else {
-                vertex_prioritized_indexing_plus(u, updated, visited_r, this_visited_flag);
+                vertex_prioritized_indexing_V1(u, updated, visited_r, this_visited_flag);
             }
             if (u % 2000 == 0) {
                 cout << u << " vertices finished!" << endl;
                 clock_t temp = clock();
                 cout << "this round took " << (float)(temp - start) / CLOCKS_PER_SEC << " s" << endl;
-            }
-        }
-    }
-    else if (type == "V3") {
-        cout << "use V3 for first " << threshold << "\% vertices..." << ", which is " << (int)(nsize*threshold/100) << endl;
-        for (uint32_t u = 0; u < nsize; u++) {
-            if (u < (int)(nsize*threshold/100)) {
-                vertex_prioritized_indexing_V3(u, updated, visited_r, this_visited_flag);
-            }
-            else {
-                vertex_prioritized_indexing_plus(u, updated, visited_r, this_visited_flag);
-            }
-            if (u % 2000 == 0) {
-                cout << u << " vertices finished!" << endl;
-                clock_t temp = clock();
-                cout << "this round took " << (float)(temp - start) / CLOCKS_PER_SEC << " s" << endl;
-            }
-        }
-    }
-    else if (type == "V4") {
-        cout << "use V4 for first " << threshold << "\% vertices..." << ", which is " << (int)(nsize*threshold/100) << endl;
-        for (uint32_t u = 0; u < nsize; u++) {
-            if (u < (int)(nsize*threshold/100)) {
-                vertex_prioritized_indexing_V4(u, updated, visited_r, this_visited_flag);
-            }
-            else {
-                vertex_prioritized_indexing_plus(u, updated, visited_r, this_visited_flag);
-            }
-            if (u % 2000 == 0) {
-                cout << u << " vertices finished!" << endl;
-                clock_t temp = clock();
-                cout << "this round took " << (float)(temp - start) / CLOCKS_PER_SEC << " s" << endl;
-            }
-        }
-    }
-    else if (type == "V5") {
-        cout << "use V5 for first " << threshold << "\% vertices..." << ", which is " << (int)(nsize*threshold/100) << endl;
-        for (uint32_t u = 0; u < nsize; u++) {
-            if (u < (int)(nsize*threshold/100)) {
-                vertex_prioritized_indexing_V5(u, updated, visited_r, this_visited_flag, turning_point_d, turning_point_w);
-            }
-            else {
-                vertex_prioritized_indexing_plus(u, updated, visited_r, this_visited_flag);
-            }
-            if (u % 2000 == 0) {
-                cout << u << " vertices finished!" << endl;
-                clock_t temp = clock();
-                cout << "this round took " << (float)(temp - start) / CLOCKS_PER_SEC << " s" << endl;
-            }
-        }
-    }
-    else if (type == "PLL") {
-        for (uint32_t u = 0; u < nsize; u++) {
-            pruned_landmark_labeling(u, visited_d);
-            if (u % 1000 == 0) {
-                cout << u << " vertices finished!" << endl;
             }
         }
     }
@@ -948,142 +562,34 @@ void WGraph::build_index(string type, int threshold) {
     cout << "build index: " << (float)(end - start) / CLOCKS_PER_SEC << " s" << endl;
 }
 
-// updated initialized to 000000...
-// visited_r initialized to [0,0,0,...]
-void WGraph::vertex_prioritized_indexing(uint32_t u, boost::dynamic_bitset<>& updated, vector<uint32_t>& visited_r) {
+void WGraph::vertex_prioritized_indexing_V1(uint32_t u, boost::dynamic_bitset<>& updated, vector<uint8_t>& visited_r, boost::dynamic_bitset<>& this_visited_flag) {
     vector<uint32_t> visited_vertex;
-    priority_queue<pair<uint32_t, uint32_t>, vector<pair<uint32_t, uint32_t>>, descWeightSort> Q1, Q2;  // Asc or Desc??
-    Q1.emplace(make_pair(u, INVALID_VALUE));
-    // updated[u] = 1;
-    visited_r[u] = INVALID_VALUE;
-    visited_vertex.push_back(u);  // use set??
-    uint32_t curr_d = 0;
-    while (!Q1.empty() || !Q2.empty()) {
-        if (!Q1.empty()) {
-            while (!Q1.empty()) {
-                pair<uint32_t, uint32_t> p = Q1.top();
-                Q1.pop();
-                uint32_t v = p.first;
-                uint32_t r = p.second;
-                // visited_r[v] = r;
-                // cout << "u, v, r, curr_d, querydist: " << u << ", " << v << ", " << r << ", " << curr_d << ", " << query_while_indexing_dist(u, v, r) << endl;
-                if (query_while_indexing_vertex(u, v, r) <= curr_d) {
-                    continue;
-                }
-                else {
-                    if (updated[v] & 1) {
-                        offset[v].back() = offset[v].back() + 1;
-                        labeling_d[v].push_back(curr_d);
-                        labeling_w[v].push_back(r);
-                    }
-                    else {
-                        labeling_v[v].push_back(u);
-                        offset[v].push_back(offset[v].back() + 1);
-                        labeling_d[v].push_back(curr_d);
-                        labeling_w[v].push_back(r);
-                        updated[v] = 1;
-                    }
-                    // cout << "<" << u << "," << curr_d << "," << r << "> to L(" << v << ")" << endl;
-                }
-                for (uint32_t idx = 0; idx < ndegree[v]; idx++) {
-                    uint32_t w = graph[v][idx];
-                    if (w <= u) {
-                        continue;
-                    }  /// only explore the vertex that ranks lower than the starting vertex u
-                    uint32_t new_r = min(r, wlist[v][idx]);
-                    if (new_r <= visited_r[w]) {
-                        continue;
-                    }
-                    Q2.emplace(w, new_r);
-                    // cout << curr_d << ": " << w << new_r << endl;
-                    visited_r[w] = new_r;
-                    visited_vertex.push_back(w);
-                }
-            }
-            curr_d++;
-        }
-        else {
-            while (!Q2.empty()) {
-                pair<uint32_t, uint32_t> p = Q2.top();
-                Q2.pop();
-                uint32_t v = p.first;
-                uint32_t r = p.second;
-                // cout << "u, v, r, curr_d, querydist: " << u << ", " << v << ", " << r << ", " << curr_d << ", " << query_while_indexing_dist(u, v, r) << endl;
-                if (query_while_indexing_vertex(u, v, r) <= curr_d) {
-                    continue;
-                }
-                else {
-                    if (updated[v] & 1) {
-                        offset[v].back() = offset[v].back() + 1;
-                        labeling_d[v].push_back(curr_d);
-                        labeling_w[v].push_back(r);
-                    }
-                    else {
-                        labeling_v[v].push_back(u);
-                        offset[v].push_back(offset[v].back() + 1);
-                        labeling_d[v].push_back(curr_d);
-                        labeling_w[v].push_back(r);
-                        updated[v] = 1;
-                    }
-                    // cout << "<" << u << "," << curr_d << "," << r << "> to L(" << v << ")" << endl;
-                }
-                for (uint32_t idx = 0; idx < ndegree[v]; idx++) {
-                    uint32_t w = graph[v][idx];
-                    if (w <= u) {
-                        continue;
-                    }  /// only explore the vertex that ranks lower than the starting vertex u
-                    uint32_t new_r = min(r, wlist[v][idx]);
-                    if (new_r <= visited_r[w]) {
-                        continue;
-                    }
-                    Q1.emplace(w, new_r);
-                    visited_r[w] = new_r;
-                    // cout << curr_d << ": " << w << new_r << endl;
-                    visited_vertex.push_back(w);
-                }
-            }
-            curr_d++;
-        }
-    }
-
-    /// reset flag vectors
-    for (auto w : visited_vertex) {
-        updated[w] = 0;
-        visited_r[w] = 0;
-    }
-}
-
-// change based on vertex_prioritized_indexing but remove the priority queue
-void WGraph::vertex_prioritized_indexing_plus(uint32_t u, boost::dynamic_bitset<>& updated, vector<uint32_t>& visited_r, boost::dynamic_bitset<>& this_visited_flag) {
-    vector<uint32_t> visited_vertex;
-    queue<pair<uint32_t, uint32_t>> Q1, Q2;
-    Q1.emplace(make_pair(u, INVALID_VALUE));
-    visited_r[u] = INVALID_VALUE;
+    queue<pair<uint32_t, uint8_t>> Q1, Q2;
+    Q1.emplace(make_pair(u, INVALID_VALUE_8bit));
+    visited_r[u] = INVALID_VALUE_8bit;
     visited_vertex.push_back(u);
-    uint32_t curr_d = 0;
+    uint16_t curr_d = 0;
+
     while (!Q1.empty() || !Q2.empty()) {
         if (!Q1.empty()) {
-            // unordered_set<uint32_t> this_visited;
             vector<uint32_t> this_visited;
             while (!Q1.empty()) {
-                pair<uint32_t, uint32_t> p = Q1.front();
+                pair<uint32_t, uint8_t> p = Q1.front();
                 Q1.pop();
                 uint32_t v = p.first;
-                uint32_t r = p.second;
-                if (query_while_indexing_vertex(u, v, r) <= curr_d) {
+                uint8_t r = p.second;
+                if (query_while_indexing_vertex_V1(u, v, curr_d, r)) {
                     continue;
                 }
                 else {
                     if (updated[v] & 1) {
                         offset[v].back() = offset[v].back() + 1;
-                        labeling_d[v].push_back(curr_d);
-                        labeling_w[v].push_back(r);
+                        labeling_dw[v].push_back(make_pair(curr_d, r));
                     }
                     else {
                         labeling_v[v].push_back(u);
                         offset[v].push_back(offset[v].back() + 1);
-                        labeling_d[v].push_back(curr_d);
-                        labeling_w[v].push_back(r);
+                        labeling_dw[v].push_back(make_pair(curr_d, r));
                         updated[v] = 1;
                     }
                 }
@@ -1092,7 +598,7 @@ void WGraph::vertex_prioritized_indexing_plus(uint32_t u, boost::dynamic_bitset<
                     if (w <= u) {
                         continue;
                     }  /// only explore the vertex that ranks lower than the starting vertex u
-                    uint32_t new_r = min(r, wlist[v][idx]);
+                    uint8_t new_r = min(r, (uint8_t)wlist[v][idx]);
                     if (new_r <= visited_r[w]) {
                         if (new_r != 0 || visited_r[w] != 0) {
                             continue;
@@ -1106,7 +612,6 @@ void WGraph::vertex_prioritized_indexing_plus(uint32_t u, boost::dynamic_bitset<
                     visited_vertex.push_back(w);
                 }
             }
-
             for (auto it : this_visited) {
                 Q2.emplace(make_pair(it, visited_r[it]));
                 this_visited_flag[it] = 0;
@@ -1114,27 +619,24 @@ void WGraph::vertex_prioritized_indexing_plus(uint32_t u, boost::dynamic_bitset<
             curr_d++;
         }
         else {
-            // unordered_set<uint32_t> this_visited;
             vector<uint32_t> this_visited;
             while (!Q2.empty()) {
-                pair<uint32_t, uint32_t> p = Q2.front();
+                pair<uint32_t, uint8_t> p = Q2.front();
                 Q2.pop();
                 uint32_t v = p.first;
-                uint32_t r = p.second;
-                if (query_while_indexing_vertex(u, v, r) <= curr_d) {
+                uint8_t r = p.second;
+                if (query_while_indexing_vertex_V1(u, v, curr_d, r)) {
                     continue;
                 }
                 else {
                     if (updated[v] & 1) {
                         offset[v].back() = offset[v].back() + 1;
-                        labeling_d[v].push_back(curr_d);
-                        labeling_w[v].push_back(r);
+                        labeling_dw[v].push_back(make_pair(curr_d, r));
                     }
                     else {
                         labeling_v[v].push_back(u);
                         offset[v].push_back(offset[v].back() + 1);
-                        labeling_d[v].push_back(curr_d);
-                        labeling_w[v].push_back(r);
+                        labeling_dw[v].push_back(make_pair(curr_d, r));
                         updated[v] = 1;
                     }
                 }
@@ -1143,7 +645,7 @@ void WGraph::vertex_prioritized_indexing_plus(uint32_t u, boost::dynamic_bitset<
                     if (w <= u) {
                         continue;
                     }  /// only explore the vertex that ranks lower than the starting vertex u
-                    uint32_t new_r = min(r, wlist[v][idx]);
+                    uint8_t new_r = min(r, (uint8_t)wlist[v][idx]);
                     if (new_r <= visited_r[w]) {
                         if (new_r != 0 || visited_r[w] != 0) {
                             continue;
@@ -1172,48 +674,52 @@ void WGraph::vertex_prioritized_indexing_plus(uint32_t u, boost::dynamic_bitset<
     }
 }
 
-// V2, same as V1 but changed query method
-void WGraph::vertex_prioritized_indexing_V2(uint32_t u, boost::dynamic_bitset<>& updated, vector<uint32_t>& visited_r, boost::dynamic_bitset<>& this_visited_flag) {
+void WGraph::vertex_prioritized_indexing_V8(uint32_t u, boost::dynamic_bitset<>& updated, vector<uint8_t>& visited_r, boost::dynamic_bitset<>& this_visited_flag) {
     vector<uint32_t> visited_vertex;
-    queue<pair<uint32_t, uint32_t>> Q1, Q2;
-    Q1.emplace(make_pair(u, INVALID_VALUE));
-    visited_r[u] = INVALID_VALUE;
+    queue<pair<uint32_t, uint8_t>> Q1, Q2;
+    Q1.emplace(make_pair(u, INVALID_VALUE_8bit));
+    visited_r[u] = INVALID_VALUE_8bit;
     visited_vertex.push_back(u);
-    uint32_t curr_d = 0;
+    uint16_t curr_d = 0;
 
-    vector<vector<pair<uint32_t, uint32_t>>> u_label = vector<vector<pair<uint32_t, uint32_t>>>(nsize, vector<pair<uint32_t, uint32_t>>());
+    vector<uint8_t> max_pruned_r = vector<uint8_t>(nsize, 0);
+
+    register vector<vector<pair<uint16_t, uint8_t>>> u_label = vector<vector<pair<uint16_t, uint8_t>>>(nsize, vector<pair<uint16_t, uint8_t>>());
     for (uint32_t i = 0; i < labeling_v[u].size(); i++) {
         uint32_t v = labeling_v[u][i];
         for (uint32_t p = offset[u][i]; p < offset[u][i + 1]; p++) {
-            uint32_t d = labeling_d[u][p];
-            uint32_t r = labeling_w[u][p];
+            uint16_t d = labeling_dw[u][p].first;
+            uint8_t r = labeling_dw[u][p].second;
             u_label[v].emplace_back(make_pair(d, r));
         }
     }
-    u_label[u].emplace_back(make_pair(0, INVALID_VALUE));
+    u_label[u].emplace_back(make_pair(0, INVALID_VALUE_8bit));
 
     while (!Q1.empty() || !Q2.empty()) {
         if (!Q1.empty()) {
             vector<uint32_t> this_visited;
             while (!Q1.empty()) {
-                pair<uint32_t, uint32_t> p = Q1.front();
+                pair<uint32_t, uint8_t> p = Q1.front();
                 Q1.pop();
                 uint32_t v = p.first;
-                uint32_t r = p.second;
-                if (query_while_indexing_vertex_V2(u, v, r, u_label) <= curr_d) {
+                uint8_t r = p.second;
+                uint16_t query_d;
+
+                // if (r < max_pruned_r[v]) {
+                //     continue;
+                // } else if
+                if (query_while_indexing_vertex_V8(u, v, curr_d, r, u_label)) {
                     continue;
                 }
                 else {
                     if (updated[v] & 1) {
                         offset[v].back() = offset[v].back() + 1;
-                        labeling_d[v].push_back(curr_d);
-                        labeling_w[v].push_back(r);
+                        labeling_dw[v].push_back(make_pair(curr_d, r));
                     }
                     else {
                         labeling_v[v].push_back(u);
                         offset[v].push_back(offset[v].back() + 1);
-                        labeling_d[v].push_back(curr_d);
-                        labeling_w[v].push_back(r);
+                        labeling_dw[v].push_back(make_pair(curr_d, r));
                         updated[v] = 1;
                     }
                 }
@@ -1222,140 +728,7 @@ void WGraph::vertex_prioritized_indexing_V2(uint32_t u, boost::dynamic_bitset<>&
                     if (w <= u) {
                         continue;
                     }
-                    uint32_t new_r = min(r, wlist[v][idx]);
-                    if (new_r <= visited_r[w]) {
-                        if (new_r != 0 || visited_r[w] != 0) {
-                            continue;
-                        }
-                    }
-                    visited_r[w] = new_r;
-                    if (this_visited_flag[w] & 1) {
-                        continue;
-                    }
-                    this_visited.push_back(w);
-                    // this_visited_flag[w] = 1;
-                    visited_vertex.push_back(w);
-                }
-            }
-            for (auto it : this_visited) {
-                Q2.emplace(make_pair(it, visited_r[it]));
-                this_visited_flag[it] = 0;
-            }
-            curr_d++;
-        }
-        else {
-            vector<uint32_t> this_visited;
-            while (!Q2.empty()) {
-                pair<uint32_t, uint32_t> p = Q2.front();
-                Q2.pop();
-                uint32_t v = p.first;
-                uint32_t r = p.second;
-                if (query_while_indexing_vertex_V2(u, v, r, u_label) <= curr_d) {
-                    continue;
-                }
-                else {
-                    if (updated[v] & 1) {
-                        offset[v].back() = offset[v].back() + 1;
-                        labeling_d[v].push_back(curr_d);
-                        labeling_w[v].push_back(r);
-                    }
-                    else {
-                        labeling_v[v].push_back(u);
-                        offset[v].push_back(offset[v].back() + 1);
-                        labeling_d[v].push_back(curr_d);
-                        labeling_w[v].push_back(r);
-                        updated[v] = 1;
-                    }
-                }
-                for (uint32_t idx = 0; idx < ndegree[v]; idx++) {
-                    uint32_t w = graph[v][idx];
-                    if (w <= u) {
-                        continue;
-                    }
-                    uint32_t new_r = min(r, wlist[v][idx]);
-                    if (new_r <= visited_r[w]) {
-                        if (new_r != 0 || visited_r[w] != 0) {
-                            continue;
-                        }
-                    }
-                    visited_r[w] = new_r;
-                    if (this_visited_flag[w] & 1) {
-                        continue;
-                    }
-                    this_visited.push_back(w);
-                    // this_visited_flag[w] = 1;
-                    visited_vertex.push_back(w);
-                }
-            }
-            for (auto it : this_visited) {
-                Q1.emplace(make_pair(it, visited_r[it]));
-                this_visited_flag[it] = 0;
-            }
-            curr_d++;
-        }
-    }
-    // reset flag vectors
-    for (auto w : visited_vertex) {
-        updated[w] = 0;
-        visited_r[w] = 0;
-    }
-}
-
-// V3, changed data stucture of mapping (labels of u)
-void WGraph::vertex_prioritized_indexing_V3(uint32_t u, boost::dynamic_bitset<>& updated, vector<uint32_t>& visited_r, boost::dynamic_bitset<>& this_visited_flag) {
-    vector<uint32_t> visited_vertex;
-    queue<pair<uint32_t, uint32_t>> Q1, Q2;
-    Q1.emplace(make_pair(u, INVALID_VALUE));
-    visited_r[u] = INVALID_VALUE;
-    visited_vertex.push_back(u);
-    uint32_t curr_d = 0;
-
-    vector<vector<uint32_t>> u_label_d = vector<vector<uint32_t>>(nsize, vector<uint32_t>());       // TODO: change size from nsize to u+1?
-    vector<vector<uint32_t>> u_label_w = vector<vector<uint32_t>>(nsize, vector<uint32_t>());
-
-    for (uint32_t i = 0; i < labeling_v[u].size(); i++) {
-        uint32_t v = labeling_v[u][i];
-        for (uint32_t p = offset[u][i]; p < offset[u][i + 1]; p++) {
-            uint32_t d = labeling_d[u][p];
-            uint32_t r = labeling_w[u][p];
-            u_label_d[v].emplace_back(d);
-            u_label_w[v].emplace_back(r);
-        }
-    }
-    u_label_d[u].emplace_back(0);
-    u_label_w[u].emplace_back(INVALID_VALUE);
-
-    while (!Q1.empty() || !Q2.empty()) {
-        if (!Q1.empty()) {
-            vector<uint32_t> this_visited;
-            while (!Q1.empty()) {
-                pair<uint32_t, uint32_t> p = Q1.front();
-                Q1.pop();
-                uint32_t v = p.first;
-                uint32_t r = p.second;
-                if (query_while_indexing_vertex_V3(u, v, r, u_label_d, u_label_w) <= curr_d) {
-                    continue;
-                }
-                else {
-                    if (updated[v] & 1) {
-                        offset[v].back() = offset[v].back() + 1;
-                        labeling_d[v].push_back(curr_d);
-                        labeling_w[v].push_back(r);
-                    }
-                    else {
-                        labeling_v[v].push_back(u);
-                        offset[v].push_back(offset[v].back() + 1);
-                        labeling_d[v].push_back(curr_d);
-                        labeling_w[v].push_back(r);
-                        updated[v] = 1;
-                    }
-                }
-                for (uint32_t idx = 0; idx < ndegree[v]; idx++) {
-                    uint32_t w = graph[v][idx];
-                    if (w <= u) {
-                        continue;
-                    }
-                    uint32_t new_r = min(r, wlist[v][idx]);
+                    uint8_t new_r = min(r, (uint8_t)wlist[v][idx]);
                     if (new_r <= visited_r[w]) {
                         if (new_r != 0 || visited_r[w] != 0) {
                             continue;
@@ -1379,24 +752,27 @@ void WGraph::vertex_prioritized_indexing_V3(uint32_t u, boost::dynamic_bitset<>&
         else {
             vector<uint32_t> this_visited;
             while (!Q2.empty()) {
-                pair<uint32_t, uint32_t> p = Q2.front();
+                pair<uint32_t, uint8_t> p = Q2.front();
                 Q2.pop();
                 uint32_t v = p.first;
-                uint32_t r = p.second;
-                if (query_while_indexing_vertex_V3(u, v, r, u_label_d, u_label_w) <= curr_d) {
+                uint8_t r = p.second;
+                uint16_t query_d;
+
+                // if (r < max_pruned_r[v]) {
+                //     continue;
+                // } else if
+                if (query_while_indexing_vertex_V8(u, v, curr_d, r, u_label)) {
                     continue;
                 }
                 else {
                     if (updated[v] & 1) {
                         offset[v].back() = offset[v].back() + 1;
-                        labeling_d[v].push_back(curr_d);
-                        labeling_w[v].push_back(r);
+                        labeling_dw[v].push_back(make_pair(curr_d, r));
                     }
                     else {
                         labeling_v[v].push_back(u);
                         offset[v].push_back(offset[v].back() + 1);
-                        labeling_d[v].push_back(curr_d);
-                        labeling_w[v].push_back(r);
+                        labeling_dw[v].push_back(make_pair(curr_d, r));
                         updated[v] = 1;
                     }
                 }
@@ -1405,7 +781,7 @@ void WGraph::vertex_prioritized_indexing_V3(uint32_t u, boost::dynamic_bitset<>&
                     if (w <= u) {
                         continue;
                     }
-                    uint32_t new_r = min(r, wlist[v][idx]);
+                    uint8_t new_r = min(r, (uint8_t)wlist[v][idx]);
                     if (new_r <= visited_r[w]) {
                         if (new_r != 0 || visited_r[w] != 0) {
                             continue;
@@ -1431,348 +807,6 @@ void WGraph::vertex_prioritized_indexing_V3(uint32_t u, boost::dynamic_bitset<>&
     for (auto w : visited_vertex) {
         updated[w] = 0;
         visited_r[w] = 0;
-    }
-}
-
-
-// V4, optimization that stores turning points of r, initialized each round (each u)
-void WGraph::vertex_prioritized_indexing_V4(uint32_t u, boost::dynamic_bitset<>& updated, vector<uint32_t>& visited_r, boost::dynamic_bitset<>& this_visited_flag) {
-    vector<uint32_t> visited_vertex;
-    queue<pair<uint32_t, uint32_t>> Q1, Q2;
-    Q1.emplace(make_pair(u, INVALID_VALUE));
-    visited_r[u] = INVALID_VALUE;
-    visited_vertex.push_back(u);
-    uint32_t curr_d = 0;
-
-    vector<uint32_t> turning_point_w = vector<uint32_t>(nsize, 0);
-    vector<uint32_t> turning_point_d = vector<uint32_t>(nsize, 0);
-
-    vector<vector<pair<uint32_t, uint32_t>>> u_label = vector<vector<pair<uint32_t, uint32_t>>>(nsize, vector<pair<uint32_t, uint32_t>>());
-    for (uint32_t i = 0; i < labeling_v[u].size(); i++) {
-        uint32_t v = labeling_v[u][i];
-        for (uint32_t p = offset[u][i]; p < offset[u][i + 1]; p++) {
-            uint32_t d = labeling_d[u][p];
-            uint32_t r = labeling_w[u][p];
-            u_label[v].emplace_back(make_pair(d, r));
-        }
-    }
-    u_label[u].emplace_back(make_pair(0, INVALID_VALUE));
-
-    while (!Q1.empty() || !Q2.empty()) {
-        if (!Q1.empty()) {
-            vector<uint32_t> this_visited;
-            while (!Q1.empty()) {
-                pair<uint32_t, uint32_t> p = Q1.front();
-                Q1.pop();
-                uint32_t v = p.first;
-                uint32_t r = p.second;
-                uint32_t query_d;
-
-                if (r < turning_point_w[v]) {
-                    query_d = turning_point_d[v];
-                }
-                else {
-                    query_d = query_while_indexing_vertex_V4(u, v, r, u_label, turning_point_d, turning_point_w);
-                }
-                if (query_d <= curr_d) {
-                    continue;
-                }
-                else {
-                    if (updated[v] & 1) {
-                        offset[v].back() = offset[v].back() + 1;
-                        labeling_d[v].push_back(curr_d);
-                        labeling_w[v].push_back(r);
-                    }
-                    else {
-                        labeling_v[v].push_back(u);
-                        offset[v].push_back(offset[v].back() + 1);
-                        labeling_d[v].push_back(curr_d);
-                        labeling_w[v].push_back(r);
-                        updated[v] = 1;
-                    }
-                }
-                for (uint32_t idx = 0; idx < ndegree[v]; idx++) {
-                    uint32_t w = graph[v][idx];
-                    if (w <= u) {
-                        continue;
-                    }
-                    uint32_t new_r = min(r, wlist[v][idx]);
-                    if (new_r <= visited_r[w]) {
-                        if (new_r != 0 || visited_r[w] != 0) {
-                            continue;
-                        }
-                    }
-                    visited_r[w] = new_r;
-                    if (this_visited_flag[w] & 1) {
-                        continue;
-                    }
-                    this_visited.push_back(w);
-                    this_visited_flag[w] = 1;
-                    visited_vertex.push_back(w);
-                }
-            }
-            for (auto it : this_visited) {
-                Q2.emplace(make_pair(it, visited_r[it]));
-                this_visited_flag[it] = 0;
-            }
-            curr_d++;
-        }
-        else {
-            vector<uint32_t> this_visited;
-            while (!Q2.empty()) {
-                pair<uint32_t, uint32_t> p = Q2.front();
-                Q2.pop();
-                uint32_t v = p.first;
-                uint32_t r = p.second;
-                uint32_t query_d;
-
-                if (r < turning_point_w[v]) {
-                    query_d = turning_point_d[v];
-                }
-                else {
-                    query_d = query_while_indexing_vertex_V4(u, v, r, u_label, turning_point_d, turning_point_w);
-                }
-                if (query_d <= curr_d) {
-                    continue;
-                }
-                else {
-                    if (updated[v] & 1) {
-                        offset[v].back() = offset[v].back() + 1;
-                        labeling_d[v].push_back(curr_d);
-                        labeling_w[v].push_back(r);
-                    }
-                    else {
-                        labeling_v[v].push_back(u);
-                        offset[v].push_back(offset[v].back() + 1);
-                        labeling_d[v].push_back(curr_d);
-                        labeling_w[v].push_back(r);
-                        updated[v] = 1;
-                    }
-                }
-                for (uint32_t idx = 0; idx < ndegree[v]; idx++) {
-                    uint32_t w = graph[v][idx];
-                    if (w <= u) {
-                        continue;
-                    }
-                    uint32_t new_r = min(r, wlist[v][idx]);
-                    if (new_r <= visited_r[w]) {
-                        if (new_r != 0 || visited_r[w] != 0) {
-                            continue;
-                        }
-                    }
-                    visited_r[w] = new_r;
-                    if (this_visited_flag[w] & 1) {
-                        continue;
-                    }
-                    this_visited.push_back(w);
-                    this_visited_flag[w] = 1;
-                    visited_vertex.push_back(w);
-                }
-            }
-            for (auto it : this_visited) {
-                Q1.emplace(make_pair(it, visited_r[it]));
-                this_visited_flag[it] = 0;
-            }
-            curr_d++;
-        }
-    }
-    // reset flag vectors
-    for (auto w : visited_vertex) {
-        updated[w] = 0;
-        visited_r[w] = 0;
-    }
-}
-
-// V5, different implementation of V4
-void WGraph::vertex_prioritized_indexing_V5(uint32_t u,
-                                            boost::dynamic_bitset<>& updated,
-                                            vector<uint32_t>& visited_r,
-                                            boost::dynamic_bitset<>& this_visited_flag,
-                                            vector<uint32_t>& turning_point_w,
-                                            vector<uint32_t>& turning_point_d) {
-    vector<uint32_t> visited_tp;
-    vector<uint32_t> visited_vertex;
-    queue<pair<uint32_t, uint32_t>> Q1, Q2;
-    Q1.emplace(make_pair(u, INVALID_VALUE));
-    visited_r[u] = INVALID_VALUE;
-    visited_vertex.push_back(u);
-    uint32_t curr_d = 0;
-
-    vector<vector<pair<uint32_t, uint32_t>>> u_label = vector<vector<pair<uint32_t, uint32_t>>>(nsize, vector<pair<uint32_t, uint32_t>>());
-    for (uint32_t i = 0; i < labeling_v[u].size(); i++) {
-        uint32_t v = labeling_v[u][i];
-        for (uint32_t p = offset[u][i]; p < offset[u][i + 1]; p++) {
-            uint32_t d = labeling_d[u][p];
-            uint32_t r = labeling_w[u][p];
-            u_label[v].emplace_back(make_pair(d, r));
-        }
-    }
-    u_label[u].emplace_back(make_pair(0, INVALID_VALUE));
-
-    while (!Q1.empty() || !Q2.empty()) {
-        if (!Q1.empty()) {
-            vector<uint32_t> this_visited;
-            while (!Q1.empty()) {
-                pair<uint32_t, uint32_t> p = Q1.front();
-                Q1.pop();
-                uint32_t v = p.first;
-                uint32_t r = p.second;
-                uint32_t query_d;
-
-                if (r < turning_point_w[v]) {
-                    query_d = turning_point_d[v];
-                }
-                else {
-                    query_d = query_while_indexing_vertex_V5(u, v, r, u_label, turning_point_d, turning_point_w, visited_tp);
-                }
-                if (query_d <= curr_d) {
-                    continue;
-                }
-                else {
-                    if (updated[v] & 1) {
-                        offset[v].back() = offset[v].back() + 1;
-                        labeling_d[v].push_back(curr_d);
-                        labeling_w[v].push_back(r);
-                    }
-                    else {
-                        labeling_v[v].push_back(u);
-                        offset[v].push_back(offset[v].back() + 1);
-                        labeling_d[v].push_back(curr_d);
-                        labeling_w[v].push_back(r);
-                        updated[v] = 1;
-                    }
-                }
-                for (uint32_t idx = 0; idx < ndegree[v]; idx++) {
-                    uint32_t w = graph[v][idx];
-                    if (w <= u) {
-                        continue;
-                    }
-                    uint32_t new_r = min(r, wlist[v][idx]);
-                    if (new_r <= visited_r[w]) {
-                        if (new_r != 0 || visited_r[w] != 0) {
-                            continue;
-                        }
-                    }
-                    visited_r[w] = new_r;
-                    if (this_visited_flag[w] & 1) {
-                        continue;
-                    }
-                    this_visited.push_back(w);
-                    this_visited_flag[w] = 1;
-                    visited_vertex.push_back(w);
-                }
-            }
-            for (auto it : this_visited) {
-                Q2.emplace(make_pair(it, visited_r[it]));
-                this_visited_flag[it] = 0;
-            }
-            curr_d++;
-        }
-        else {
-            vector<uint32_t> this_visited;
-            while (!Q2.empty()) {
-                pair<uint32_t, uint32_t> p = Q2.front();
-                Q2.pop();
-                uint32_t v = p.first;
-                uint32_t r = p.second;
-                uint32_t query_d;
-
-                if (r < turning_point_w[v]) {
-                    query_d = turning_point_d[v];
-                }
-                else {
-                    query_d = query_while_indexing_vertex_V5(u, v, r, u_label, turning_point_d, turning_point_w, visited_tp);
-                }
-                if (query_d <= curr_d) {
-                    continue;
-                }
-                else {
-                    if (updated[v] & 1) {
-                        offset[v].back() = offset[v].back() + 1;
-                        labeling_d[v].push_back(curr_d);
-                        labeling_w[v].push_back(r);
-                    }
-                    else {
-                        labeling_v[v].push_back(u);
-                        offset[v].push_back(offset[v].back() + 1);
-                        labeling_d[v].push_back(curr_d);
-                        labeling_w[v].push_back(r);
-                        updated[v] = 1;
-                    }
-                }
-                for (uint32_t idx = 0; idx < ndegree[v]; idx++) {
-                    uint32_t w = graph[v][idx];
-                    if (w <= u) {
-                        continue;
-                    }
-                    uint32_t new_r = min(r, wlist[v][idx]);
-                    if (new_r <= visited_r[w]) {
-                        if (new_r != 0 || visited_r[w] != 0) {
-                            continue;
-                        }
-                    }
-                    visited_r[w] = new_r;
-                    if (this_visited_flag[w] & 1) {
-                        continue;
-                    }
-                    this_visited.push_back(w);
-                    this_visited_flag[w] = 1;
-                    visited_vertex.push_back(w);
-                }
-            }
-            for (auto it : this_visited) {
-                Q1.emplace(make_pair(it, visited_r[it]));
-                this_visited_flag[it] = 0;
-            }
-            curr_d++;
-        }
-    }
-    // reset flag vectors
-    for (auto w : visited_vertex) {
-        updated[w] = 0;
-        visited_r[w] = 0;
-    }
-    for (auto w : visited_tp) {
-        turning_point_d[w] = 0;
-        turning_point_w[w] = 0;
-    }
-}
-
-// index without weightings
-void WGraph::pruned_landmark_labeling(uint32_t u, vector<uint32_t>& visited_d) {
-    vector<uint32_t> visited_vertex;
-    queue<uint32_t> Q;
-    Q.emplace(u);
-    visited_d[u] = 0;
-    visited_vertex.push_back(u);
-    while (!Q.empty()) {
-        uint32_t v = Q.front();
-        Q.pop();
-        // cout << "u, v, d: " << u << ", " << v << ", " <<  visited_d[v] << ", " << query_for_pll(u,v) << endl;
-        if (v != u && query_for_pll(u, v) <= visited_d[v]) {  //// need to implement
-            continue;
-        }
-        else {
-            labeling_v[v].push_back(u);
-            // offset[v].push_back(offset[v].back() + 1);
-            labeling_d[v].push_back(visited_d[v]);
-        }
-        for (uint32_t idx = 0; idx < ndegree[v]; idx++) {
-            uint32_t w = graph[v][idx];
-            if (w <= u) {
-                continue;
-            }  /// only explore the vertex that ranks lower than the starting vertex u
-            if (visited_d[w] != INVALID_VALUE) {
-                continue;
-            }
-            visited_d[w] = visited_d[v] + 1;
-            visited_vertex.push_back(w);
-            Q.emplace(w);
-        }
-    }
-    /// reset flag vectors
-    for (auto w : visited_vertex) {
-        visited_d[w] = INVALID_VALUE;
     }
 }
 
@@ -1781,18 +815,8 @@ void WGraph::print_index() {
         cout << u << ": ";
         for (uint32_t i = 0; i < labeling_v[u].size(); i++) {
             for (uint32_t j = offset[u][i]; j < offset[u][i + 1]; j++) {
-                cout << "<" << labeling_v[u][i] << "," << labeling_d[u][j] << "," << labeling_w[u][j] << ">, ";
+                cout << "<" << labeling_v[u][i] << "," << labeling_dw[u][j].first << "," << labeling_dw[u][j].second << ">, ";
             }
-        }
-        cout << endl;
-    }
-}
-
-void WGraph::print_index_pll() {
-    for (uint32_t u = 0; u < nsize; u++) {
-        cout << u << ": ";
-        for (uint32_t i = 0; i < labeling_v[u].size(); i++) {
-            cout << "<" << labeling_v[u][i] << "," << labeling_d[u][i] << ">, ";
         }
         cout << endl;
     }
@@ -1800,16 +824,15 @@ void WGraph::print_index_pll() {
 
 void WGraph::get_index_size() {
     cout << "--------------Details of Index Occupation-------------" << endl;
-    uint64_t cnt1 = 0, cnt2 = 0, cnt3 = 0, cnt4 = 0;
+    uint64_t cnt1 = 0, cnt2 = 0, cnt3 = 0;
     for (uint32_t u = 0; u < nsize; u++) {
         cnt1 += labeling_v[u].size();
         cnt2 += offset[u].size();
-        cnt3 += labeling_d[u].size();
-        cnt4 += labeling_w[u].size();
+        cnt3 += labeling_dw[u].size();
     }
 
-    cout << "labeling v, offset, labeling d, labeling w: " << cnt1 << ", " << cnt2 << ", " << cnt3 << ", " << cnt4 << endl;
-    cout << "total number of unsigned ints in the index: " << cnt1 + cnt2 + cnt3 + cnt4 << endl;
+    cout << "labeling v, offset, labeling d, labeling w: " << cnt1 << ", " << cnt2 << ", " << cnt3 << endl;
+    cout << "total number of unsigned ints 32 in the index: " << cnt1 + cnt2 << ", total number of unsigned int 16+8: " << cnt3 << endl;
 }
 
 void WGraph::check_minimality() {
@@ -1817,64 +840,13 @@ void WGraph::check_minimality() {
     for (uint32_t u = 0; u < nsize; u++) {
         for (uint32_t wpos = 0; wpos < labeling_v[u].size(); wpos++) {
             for (uint32_t dpos = offset[u][wpos]; dpos < offset[u][wpos + 1]; dpos++) {
-                uint32_t d1 = query_with_index_vertex_skip(u, labeling_v[u][wpos], labeling_w[u][dpos], dpos);
+                uint32_t d1 = query_skip(u, labeling_v[u][wpos], labeling_w[u][dpos], dpos);
                 if (d1 == labeling_d[u][dpos]) {
                     cout << "failed at u, v, r, d: " << u << ", " << labeling_v[u][wpos] << ", " << labeling_w[u][dpos] << ", " << labeling_d[u][dpos] << endl;
                 }
             }
         }
     }
-}
-
-void WGraph::preprocess(int num_intervals) {
-    if (num_intervals > wsize) {
-        cout << "Number of intervals > size of label set." << endl;
-        exit(0);
-    }
-
-    std::set<uint32_t> weight_set;
-    for (uint32_t i = 0; i < nsize; i++) {
-        for (uint32_t j = 0; j < wlist[i].size(); j++) {
-            weight_set.insert(wlist[i][j]);
-        }
-    }
-    vector<uint32_t> weight_values;
-    std::copy(weight_set.begin(), weight_set.end(), std::back_inserter(weight_values));
-    /*
-    cout << "Weights" << endl;
-    for(auto it = weight_values.begin(); it != weight_values.end(); it++)
-    {
-        cout << *it << ", ";
-    }
-    cout << endl;
-    */
-
-    vector<vector<uint32_t>> out_vec;
-    size_t length = weight_set.size()/num_intervals;
-    size_t remain = weight_set.size()%num_intervals;
-    size_t begin = 0;
-    size_t end = 0;
-
-    for (uint32_t i = 0; i < num_intervals; i++) {
-        if (remain > 0) {
-            end += (i < remain) ? (length + 1) : length;
-        }
-        else {
-            end += length;
-        }
-        vector<uint32_t> split(weight_values.begin() + begin, weight_values.begin() + end);
-        out_vec.push_back(split);
-        begin = end;
-    }
-
-    /*
-    for (auto i : out_vec) {
-        for (auto j : i) {
-            cout << j << ",";
-        }
-        cout << endl;
-    }
-    */
 }
 
 void WGraph::print_hgraph() {
@@ -1894,98 +866,6 @@ void print_v_degree_ordered(const vector<pair<uint32_t, uint32_t>> &vec) {
     }
     cout << endl;
 }
-
-// void WGraph::tree_decomposition() {
-//     clock_t start_total, end_total;
-//     start_total = clock();
-//     decomp_order = vector<uint32_t>(nsize);
-
-//     // copy graph to hgraph_
-//     for (uint32_t i = 0; i < nsize; i++) {
-//         hgraph_.push_back(graph[i]);
-//     }
-
-//     // sort all vertices by degree
-//     vector<pair<uint32_t, uint32_t>> v_degree_ordered(nsize);
-//     for (uint32_t i = 0; i < graph.size(); i++) {
-//         v_degree_ordered[i] = make_pair(i, ndegree[i]);
-//     }
-//     std::sort(v_degree_ordered.begin(), v_degree_ordered.end(), [](auto &left, auto &right) {return left.second < right.second;});
-
-//     // tree decomposition
-//     uint32_t i = nsize-1;
-//     while (!v_degree_ordered.empty()) {
-//         clock_t start, end;
-//         start = clock();
-
-//         uint32_t u = v_degree_ordered[0].first;
-//         v_degree_ordered.erase(v_degree_ordered.begin());
-//         decomp_order[i] = u;
-//         i--;
-
-//         // remove u from v's adjacency list
-//         for (auto v : hgraph_[u]) {
-//             hgraph_[v].erase(remove(hgraph_[v].begin(), hgraph_[v].end(), u), hgraph_[v].end());
-//         }
-
-//         // add edge between all neighbors of u
-//         for (auto v : hgraph_[u]) {
-//             for (auto w : hgraph_[u]) {
-//                 if ((v != w) && (find(hgraph_[v].begin(), hgraph_[v].end(), w) == hgraph_[v].end()) && (find(hgraph_[w].begin(), hgraph_[w].end(), v) == hgraph_[w].end())) {
-//                     hgraph_[w].push_back(v);
-//                     hgraph_[v].push_back(w);
-//                 }
-//             }
-//         }
-
-//         // re-calculate degrees of u's neighbors
-//         for (auto v : hgraph_[u]) {
-//             auto pos = std::find_if(v_degree_ordered.begin(), v_degree_ordered.end(), [v](const std::pair<uint32_t, uint32_t>& element){ return element.first == v;});
-//             pos->second = hgraph_[v].size();
-//         }
-
-//         // re-sort vertices by degree
-//         std::sort(v_degree_ordered.begin(), v_degree_ordered.end(), [](auto &left, auto &right) {return left.second < right.second;});
-
-//         // message
-//         end = clock();
-//         if (i % 10 == 0) cout << "decomposing vertice " << i << ", this round took " << (float)(end - start) / CLOCKS_PER_SEC << " s"  << endl;
-//     }
-
-//     // stor offset of each v in v_degree_ordered
-//     vector<uint32_t> offset(nsize);
-//     for (uint32_t i = 0; i < nsize; i++) {
-//         offset[decomp_order[i]] = i;
-//     }
-
-//     // construct new graph
-//     AdjList new_graph(nsize);
-//     AdjList new_wlist(nsize);
-//     for (uint32_t i = 0; i < nsize; i++) {
-//         uint32_t u = decomp_order[i];
-//         for (uint32_t j = 0; j < graph[u].size(); j++) {
-//             uint32_t v = graph[u][j];
-//             new_graph[i].push_back(offset[v]);
-//             new_wlist[i].push_back(wlist[u][j]);
-//         }
-//     }
-//     graph = new_graph;
-//     wlist = new_wlist;
-
-//     // reconstruct degree vector
-//     for (uint32_t i = 0; i < nsize; i++) {
-//         ndegree[i] = graph[i].size();
-//     }
-
-//     end_total = clock();
-//     cout << "tree decomposition: " << (float)(end_total - start_total) / CLOCKS_PER_SEC << " s" << endl;
-
-//     /*
-//     cout << "BFS process order: [";
-//     for (auto v : decomp_order) cout << v << ",";
-//     cout << "]" << endl;
-//     */
-// }
 
 // check if vertices of graph are ordered by degree (decreasing order)
 void WGraph::check_degree_order() {
@@ -2065,14 +945,6 @@ void WGraph::tree_decomp() {
     vector<int32_t> vertexOrder(nsize, -1);
     uint32_t vorder = 0;
 
-    // print_hgraph();
-    // cout << "old_deg = ";
-    // print_vec(old_deg);
-
-    // cout << "ndsQ = [";
-    // for (auto v : ndsQ) cout << v << ",";
-    // cout << "]" << endl;
-
     cout << "\nStart tree decomposition...\n" << endl;
 
     while (ndsQ.size() > 0) {
@@ -2090,14 +962,10 @@ void WGraph::tree_decomp() {
 
 		    vid = *ndsQ.begin();
 		    ndsQ.erase(ndsQ.begin());
-	    }
-        // cout << "vid = " << vid << endl;
-        // cout << "ndsQ = ["; for (auto v : ndsQ) cout << v << ","; cout << "]" << endl;
+        }
 
         vertexOrder[vid] = vorder++;
         auto &v_adj = hgraph[vid];
-
-        // cout << "v_adj = ["; for (auto v : v_adj) cout << v << ","; cout << "]" << endl;
 
         vector<uint32_t> valid_neighbor_index;
         for (auto u : v_adj) {
@@ -2107,9 +975,6 @@ void WGraph::tree_decomp() {
             }
         }
         vector<int> neighbor_degree_increase_cnt(valid_neighbor_index.size(), 0);
-
-        // cout << "valid_neighbor_index = ["; for (auto v : valid_neighbor_index) cout << v << ","; cout << "]" << endl;
-        // cout << "neighbor_degree_increase_cnt = ["; for (auto v : neighbor_degree_increase_cnt) cout << v << ","; cout << "]" << endl;
 
         // iterate through neighbor-pairs of vid
         for (auto i = 0; i < valid_neighbor_index.size(); i++) {
@@ -2135,14 +1000,10 @@ void WGraph::tree_decomp() {
 		        ndsQ.insert(u);
 		    }
         }
-        // print_hgraph();
-        // cout << "ndsQ = ["; for (auto v : ndsQ) cout << v << ","; cout << "]" << endl;
-        // cout << endl;
+
         end = clock();
         if (count % 5000 == 0) cout << "decomposing vertex " << count << "time: " << 5000*(float)(end - start) / CLOCKS_PER_SEC << " s" << endl;
     }
-
-    //print_graph();
 
     // construct new graph
     cout << "Constructing new graph..." << endl;
@@ -2165,21 +1026,8 @@ void WGraph::tree_decomp() {
         ndegree[i] = graph[i].size();
     }
 
-    // cout << "after:" << endl;
-    // print_graph();
-
-    // cout << "vertexOrder = [";
-    // for (auto v : vertexOrder) cout << v << ",";
-    // cout << "]" << endl;
-
     end_total = clock();
     cout << "Finished tree decomposition, total time = " << (float)(end_total - start_total) / CLOCKS_PER_SEC << " s" << endl;
-}
-
-void WGraph::print_vec(vector<uint32_t> &vec) {
-    cout << "[";
-    for (auto v : vec) cout << v << ",";
-    cout << "]" << endl;
 }
 
 void WGraph::tree_decomp_partial(float threshold) {
@@ -2277,10 +1125,6 @@ void WGraph::tree_decomp_partial(float threshold) {
         }
     }
 
-    // cout << "vertexOrder = [";
-    // for (auto v : vertexOrder) cout << v << ",";
-    // cout << "]" << endl;
-
     // find remaining vertices not sorted
     vector<uint32_t> v_remain;
     for (uint32_t i = 0; i < nsize; i++) {
@@ -2304,10 +1148,6 @@ void WGraph::tree_decomp_partial(float threshold) {
         count++;
     }
 
-    // cout << "vertexOrder = [";
-    // for (auto v : vertexOrder) cout << v << ",";
-    // cout << "]" << endl;
-
     // construct new graph
     cout << "Constructing new graph..." << endl;
 
@@ -2328,9 +1168,6 @@ void WGraph::tree_decomp_partial(float threshold) {
     for (uint32_t i = 0; i < nsize; i++) {
         ndegree[i] = graph[i].size();
     }
-
-    // cout << "after:" << endl;
-    // print_graph();
 
     end_total = clock();
     cout << "Finished tree decomposition, total time = " << (float)(end_total - start_total) / CLOCKS_PER_SEC << " s" << endl << endl;
