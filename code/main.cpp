@@ -32,7 +32,7 @@ int main(int argc, char* argv[]) {
 
     g.build_index(type, threshold);
 
-    // if (input_graph == "mz_test") g.print_index();
+    if (input_graph == "mz_test") g.print_index();
 
     g.get_index_size();
 

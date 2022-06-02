@@ -1,7 +1,7 @@
 import os
 
-graphs=["NY","FLA","CAL","E","W","CTR"]
-types=["V8"]
+graphs=["CAL","E","W"]
+types=["V10"]
 thresholds = ["10"]
 result_path = "./result_road_tree/"
 

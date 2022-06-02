@@ -14,6 +14,7 @@ WGraph::WGraph() {
     labeling_d = vector<vector<uint16_t>>();
     labeling_w = vector<vector<uint8_t>>();
     labeling_dw = vector<vector<pair<uint16_t, uint8_t>>>();
+    labeling_bit = vector<vector<uint32_t>>();
 }
 
 WGraph::WGraph(string path, string graph, bool isBin) {
@@ -328,14 +329,14 @@ uint32_t WGraph::query(uint32_t s, uint32_t t, uint32_t r, double& qtime) {
         else {
             uint32_t d1 = INVALID_VALUE, d2 = INVALID_VALUE;
             for (uint32_t p = offset[s][i]; p < offset[s][i + 1]; p++) {
-                if (labeling_w[s][p] >= r) {
-                    d1 = labeling_d[s][p];
+                if (labeling_dw[s][p].second >= r) {
+                    d1 = labeling_dw[s][p].first;
                     break;
                 }
             }
             for (uint32_t q = offset[t][j]; q < offset[t][j + 1]; q++) {
-                if (labeling_w[t][q] >= r) {
-                    d2 = labeling_d[t][q];
+                if (labeling_dw[t][q].second >= r) {
+                    d2 = labeling_dw[t][q].first;
                     break;
                 }
             }
@@ -355,8 +356,8 @@ uint32_t WGraph::query(uint32_t s, uint32_t t, uint32_t r, double& qtime) {
         if (curr_u == t) {
             uint32_t d1 = INVALID_VALUE;
             for (uint32_t p = offset[s][i]; p < offset[s][i + 1]; p++) {
-                if (labeling_w[s][p] >= r) {
-                    d1 = labeling_d[s][p];
+                if (labeling_dw[s][p].second >= r) {
+                    d1 = labeling_dw[s][p].first;
                     break;
                 }
             }
@@ -372,8 +373,8 @@ uint32_t WGraph::query(uint32_t s, uint32_t t, uint32_t r, double& qtime) {
         if (curr_w == s) {
             uint32_t d2 = INVALID_VALUE;
             for (uint32_t q = offset[t][j]; q < offset[t][j + 1]; q++) {
-                if (labeling_w[t][q] >= r) {
-                    d2 = labeling_d[t][q];
+                if (labeling_dw[t][q].second >= r) {
+                    d2 = labeling_dw[t][q].first;
                     break;
                 }
             }
@@ -408,14 +409,14 @@ uint32_t WGraph::query_skip(uint32_t s, uint32_t t, uint32_t r, uint32_t dpos) {
                 if (p == dpos) {
                     continue;
                 }
-                if (labeling_w[s][p] >= r) {
-                    d1 = labeling_d[s][p];
+                if (labeling_dw[s][p].second >= r) {
+                    d1 = labeling_dw[s][p].first;
                     break;
                 }
             }
             for (uint32_t q = offset[t][j]; q < offset[t][j + 1]; q++) {
-                if (labeling_w[t][q] >= r) {
-                    d2 = labeling_d[t][q];
+                if (labeling_dw[t][q].second >= r) {
+                    d2 = labeling_dw[t][q].first;
                     break;
                 }
             }
@@ -438,8 +439,8 @@ uint32_t WGraph::query_skip(uint32_t s, uint32_t t, uint32_t r, uint32_t dpos) {
                 if (p == dpos) {
                     continue;
                 }
-                if (labeling_w[s][p] >= r) {
-                    d1 = labeling_d[s][p];
+                if (labeling_dw[s][p].second >= r) {
+                    d1 = labeling_dw[s][p].first;
                     break;
                 }
             }
@@ -455,8 +456,8 @@ uint32_t WGraph::query_skip(uint32_t s, uint32_t t, uint32_t r, uint32_t dpos) {
         if (curr_w == s) {
             uint32_t d2 = INVALID_VALUE;
             for (uint32_t q = offset[t][j]; q < offset[t][j + 1]; q++) {
-                if (labeling_w[t][q] >= r) {
-                    d2 = labeling_d[t][q];
+                if (labeling_dw[t][q].second >= r) {
+                    d2 = labeling_dw[t][q].first;
                     break;
                 }
             }
@@ -468,7 +469,6 @@ uint32_t WGraph::query_skip(uint32_t s, uint32_t t, uint32_t r, uint32_t dpos) {
     }
     return min_dist;
 }
-
 
 template<typename T>
 bool compare_w(const T &a,const T &b){
@@ -492,6 +492,34 @@ bool WGraph::query_while_indexing_vertex_V1(uint32_t s, uint32_t t, uint16_t cur
                 uint32_t l2 = lower_bound(labeling_dw[t].begin() + offset[t][j], labeling_dw[t].begin() + offset[t][j + 1], make_pair(0,r), compare_w<pair<uint16_t, uint8_t>>) - labeling_dw[t].begin();
                 if (l2 != offset[t][j + 1]) {
                     if (labeling_dw[s][l1].first + labeling_dw[t][l2].first <= curr_d) {
+                        return true;
+                    }
+                }
+            }
+            i++;
+            j++;
+        }
+    }
+    return false;
+}
+
+bool WGraph::query_while_indexing_vertex_V2(uint32_t s, uint32_t t, uint16_t curr_d, uint8_t r) {
+    uint32_t i = 0, j = 0;
+    uint32_t isize = labeling_v[s].size();
+    uint32_t jsize = labeling_v[t].size();
+    while (i < isize && j < jsize) {
+        if (labeling_v[s][i] < labeling_v[t][j]) {
+            i++;
+        }
+        else if (labeling_v[s][i] > labeling_v[t][j]) {
+            j++;
+        }
+        else {
+            uint32_t l1 = lower_bound(labeling_bit[s].begin() + offset[s][i], labeling_bit[s].begin() + offset[s][i + 1], ((uint32_t) r << 16)) - labeling_bit[s].begin();
+            if (l1 != offset[s][i + 1]) {
+                uint32_t l2 = lower_bound(labeling_bit[t].begin() + offset[t][j], labeling_bit[t].begin() + offset[t][j + 1], ((uint32_t) r << 16)) - labeling_bit[t].begin();
+                if (l2 != offset[t][j + 1]) {
+                    if ((uint16_t)labeling_bit[s][l1] + (uint16_t)labeling_bit[t][l2] <= curr_d) {
                         return true;
                     }
                 }
@@ -527,10 +555,57 @@ bool WGraph::query_while_indexing_vertex_V8(uint32_t s, uint32_t t, uint16_t cur
     return false;
 }
 
+bool WGraph::query_while_indexing_vertex_V9(uint32_t s, uint32_t t, uint16_t curr_d, uint8_t r, vector<vector<uint32_t>>& u_label) {
+    for (uint32_t i = 0; i < labeling_v[t].size(); i++) {
+        uint32_t v = labeling_v[t][i];
+
+        if (v > s) break;
+
+        if (u_label[v].empty()) continue;
+
+        uint32_t l1 = lower_bound(labeling_bit[t].begin() + offset[t][i], labeling_bit[t].begin() + offset[t][i + 1], ((uint32_t) r << 16)) - labeling_bit[t].begin();
+        if (l1 != offset[t][i + 1]) {
+            uint32_t l2 = lower_bound(u_label[v].begin(), u_label[v].end(), ((uint32_t) r << 16)) - u_label[v].begin();
+            if (l2 != u_label[v].size()) {
+                uint16_t d = (uint16_t) labeling_bit[t][l1];
+                uint16_t u_d = (uint16_t) u_label[v][l2];
+
+                if ((u_d + d) <= curr_d) {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+bool WGraph::query_while_indexing_vertex_V10(uint32_t s, uint32_t t, uint16_t curr_d, uint8_t r, vector<vector<uint16_t>>& new_label) {
+    for (uint32_t i = 0; i < labeling_v[t].size(); i++) {
+        uint32_t v = labeling_v[t][i];
+
+        if (v > s) break;
+
+        if (new_label[v].empty()) continue;
+
+        uint16_t u_d = new_label[v][r];
+        if (u_d != INVALID_VALUE_16bit) {
+            uint32_t l1 = lower_bound(labeling_dw[t].begin() + offset[t][i], labeling_dw[t].begin() + offset[t][i + 1], make_pair(0,r), compare_w<pair<uint16_t, uint8_t>>) - labeling_dw[t].begin();
+            if (l1 != offset[t][i+1]) {
+                uint16_t d = labeling_dw[t][l1].first;
+                if ((u_d + d) <= curr_d) {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
 void WGraph::build_index(string type, int threshold) {
     labeling_v = vector<vector<uint32_t>>(nsize);
     offset = vector<vector<uint32_t>>(nsize);
     labeling_dw = vector<vector<pair<uint16_t, uint8_t>>>(nsize);
+    labeling_bit = vector<vector<uint32_t>>(nsize);
 
     for (uint32_t u = 0; u < nsize; u++) {
         offset[u].push_back(0);
@@ -547,6 +622,38 @@ void WGraph::build_index(string type, int threshold) {
         for (uint32_t u = 0; u < nsize; u++) {
             if (u < (int)(nsize*threshold/100)) {
                 vertex_prioritized_indexing_V8(u, updated, visited_r, this_visited_flag);
+            }
+            else {
+                vertex_prioritized_indexing_V1(u, updated, visited_r, this_visited_flag);
+            }
+            if (u % 2000 == 0) {
+                cout << u << " vertices finished!" << endl;
+                clock_t temp = clock();
+                cout << "this round took " << (float)(temp - start) / CLOCKS_PER_SEC << " s" << endl;
+            }
+        }
+    }
+    else if (type == "V9") {
+        cout << "use V9 for first " << threshold << "\% vertices..." << ", which is " << (int)(nsize*threshold/100) << endl;
+        for (uint32_t u = 0; u < nsize; u++) {
+            if (u < (int)(nsize*threshold/100)) {
+                vertex_prioritized_indexing_V9(u, updated, visited_r, this_visited_flag);
+            }
+            else {
+                vertex_prioritized_indexing_V2(u, updated, visited_r, this_visited_flag);
+            }
+            if (u % 2000 == 0) {
+                cout << u << " vertices finished!" << endl;
+                clock_t temp = clock();
+                cout << "this round took " << (float)(temp - start) / CLOCKS_PER_SEC << " s" << endl;
+            }
+        }
+    }
+    else if (type == "V10") {
+        cout << "use V10 for first " << threshold << "\% vertices..." << ", which is " << (int)(nsize*threshold/100) << endl;
+        for (uint32_t u = 0; u < nsize; u++) {
+            if (u < (int)(nsize*threshold/100)) {
+                vertex_prioritized_indexing_V10(u, updated, visited_r, this_visited_flag);
             }
             else {
                 vertex_prioritized_indexing_V1(u, updated, visited_r, this_visited_flag);
@@ -637,6 +744,118 @@ void WGraph::vertex_prioritized_indexing_V1(uint32_t u, boost::dynamic_bitset<>&
                         labeling_v[v].push_back(u);
                         offset[v].push_back(offset[v].back() + 1);
                         labeling_dw[v].push_back(make_pair(curr_d, r));
+                        updated[v] = 1;
+                    }
+                }
+                for (uint32_t idx = 0; idx < ndegree[v]; idx++) {
+                    uint32_t w = graph[v][idx];
+                    if (w <= u) {
+                        continue;
+                    }  /// only explore the vertex that ranks lower than the starting vertex u
+                    uint8_t new_r = min(r, (uint8_t)wlist[v][idx]);
+                    if (new_r <= visited_r[w]) {
+                        if (new_r != 0 || visited_r[w] != 0) {
+                            continue;
+                        }
+                    }
+                    visited_r[w] = new_r;
+                    if (this_visited_flag[w] & 1) {
+                        continue;
+                    }
+                    this_visited.push_back(w);
+                    visited_vertex.push_back(w);
+                }
+            }
+            for (auto it : this_visited) {
+                Q1.emplace(make_pair(it, visited_r[it]));
+                this_visited_flag[it] = 0;
+            }
+            curr_d++;
+        }
+    }
+
+    /// reset flag vectors
+    for (auto w : visited_vertex) {
+        updated[w] = 0;
+        visited_r[w] = 0;
+    }
+}
+
+void WGraph::vertex_prioritized_indexing_V2(uint32_t u, boost::dynamic_bitset<>& updated, vector<uint8_t>& visited_r, boost::dynamic_bitset<>& this_visited_flag) {
+    vector<uint32_t> visited_vertex;
+    queue<pair<uint32_t, uint8_t>> Q1, Q2;
+    Q1.emplace(make_pair(u, INVALID_VALUE_8bit));
+    visited_r[u] = INVALID_VALUE_8bit;
+    visited_vertex.push_back(u);
+    uint16_t curr_d = 0;
+
+    while (!Q1.empty() || !Q2.empty()) {
+        if (!Q1.empty()) {
+            vector<uint32_t> this_visited;
+            while (!Q1.empty()) {
+                pair<uint32_t, uint8_t> p = Q1.front();
+                Q1.pop();
+                uint32_t v = p.first;
+                uint8_t r = p.second;
+                if (query_while_indexing_vertex_V2(u, v, curr_d, r)) {
+                    continue;
+                }
+                else {
+                    if (updated[v] & 1) {
+                        offset[v].back() = offset[v].back() + 1;
+                        labeling_bit[v].push_back((uint32_t) r << 16 | curr_d);
+                    }
+                    else {
+                        labeling_v[v].push_back(u);
+                        offset[v].push_back(offset[v].back() + 1);
+                        labeling_bit[v].push_back((uint32_t) r << 16 | curr_d);
+                        updated[v] = 1;
+                    }
+                }
+                for (uint32_t idx = 0; idx < ndegree[v]; idx++) {
+                    uint32_t w = graph[v][idx];
+                    if (w <= u) {
+                        continue;
+                    }  /// only explore the vertex that ranks lower than the starting vertex u
+                    uint8_t new_r = min(r, (uint8_t)wlist[v][idx]);
+                    if (new_r <= visited_r[w]) {
+                        if (new_r != 0 || visited_r[w] != 0) {
+                            continue;
+                        }
+                    }
+                    visited_r[w] = new_r;
+                    if (this_visited_flag[w] & 1) {
+                        continue;
+                    }
+                    this_visited.push_back(w);
+                    visited_vertex.push_back(w);
+                }
+            }
+            for (auto it : this_visited) {
+                Q2.emplace(make_pair(it, visited_r[it]));
+                this_visited_flag[it] = 0;
+            }
+            curr_d++;
+        }
+        else {
+            vector<uint32_t> this_visited;
+            while (!Q2.empty()) {
+                pair<uint32_t, uint8_t> p = Q2.front();
+                Q2.pop();
+                uint32_t v = p.first;
+                uint8_t r = p.second;
+                if (query_while_indexing_vertex_V2(u, v, curr_d, r)) {
+                    continue;
+                }
+                else {
+                    if (updated[v] & 1) {
+                        offset[v].back() = offset[v].back() + 1;
+                        labeling_bit[v].push_back((uint32_t) r << 16 | curr_d);
+                    }
+                    else {
+                        labeling_v[v].push_back(u);
+                        offset[v].push_back(offset[v].back() + 1);
+                        labeling_bit[v].push_back((uint32_t) r << 16 | curr_d);
                         updated[v] = 1;
                     }
                 }
@@ -810,12 +1029,323 @@ void WGraph::vertex_prioritized_indexing_V8(uint32_t u, boost::dynamic_bitset<>&
     }
 }
 
+void WGraph::vertex_prioritized_indexing_V9(uint32_t u, boost::dynamic_bitset<>& updated, vector<uint8_t>& visited_r, boost::dynamic_bitset<>& this_visited_flag) {
+    vector<uint32_t> visited_vertex;
+    queue<pair<uint32_t, uint8_t>> Q1, Q2;
+    Q1.emplace(make_pair(u, INVALID_VALUE_8bit));
+    visited_r[u] = INVALID_VALUE_8bit;
+    visited_vertex.push_back(u);
+    uint16_t curr_d = 0;
+
+    vector<uint8_t> max_pruned_r = vector<uint8_t>(nsize, 0);
+
+    register vector<vector<uint32_t>> u_label = vector<vector<uint32_t>>(nsize, vector<uint32_t>());
+    for (uint32_t i = 0; i < labeling_v[u].size(); i++) {
+        uint32_t v = labeling_v[u][i];
+        for (uint32_t p = offset[u][i]; p < offset[u][i + 1]; p++) {
+            u_label[v].emplace_back(labeling_bit[u][p]);
+        }
+    }
+    u_label[u].emplace_back(((uint32_t) 0 << 16) | INVALID_VALUE);
+
+    while (!Q1.empty() || !Q2.empty()) {
+        if (!Q1.empty()) {
+            vector<uint32_t> this_visited;
+            while (!Q1.empty()) {
+                pair<uint32_t, uint8_t> p = Q1.front();
+                Q1.pop();
+                uint32_t v = p.first;
+                uint8_t r = p.second;
+                uint16_t query_d;
+
+                // if (r < max_pruned_r[v]) {
+                //     continue;
+                // } else if
+                if (query_while_indexing_vertex_V9(u, v, curr_d, r, u_label)) {
+                    continue;
+                }
+                else {
+                    if (updated[v] & 1) {
+                        offset[v].back() = offset[v].back() + 1;
+                        labeling_bit[v].push_back((uint32_t) r << 16 | curr_d);
+                    }
+                    else {
+                        labeling_v[v].push_back(u);
+                        offset[v].push_back(offset[v].back() + 1);
+                        labeling_bit[v].push_back(((uint32_t) r << 16) | curr_d);
+                        updated[v] = 1;
+                    }
+                }
+                for (uint32_t idx = 0; idx < ndegree[v]; idx++) {
+                    uint32_t w = graph[v][idx];
+                    if (w <= u) {
+                        continue;
+                    }
+                    uint8_t new_r = min(r, (uint8_t)wlist[v][idx]);
+                    if (new_r <= visited_r[w]) {
+                        if (new_r != 0 || visited_r[w] != 0) {
+                            continue;
+                        }
+                    }
+                    visited_r[w] = new_r;
+                    if (this_visited_flag[w] & 1) {
+                        continue;
+                    }
+                    this_visited.push_back(w);
+                    this_visited_flag[w] = 1;
+                    visited_vertex.push_back(w);
+                }
+            }
+            for (auto it : this_visited) {
+                Q2.emplace(make_pair(it, visited_r[it]));
+                this_visited_flag[it] = 0;
+            }
+            curr_d++;
+        }
+        else {
+            vector<uint32_t> this_visited;
+            while (!Q2.empty()) {
+                pair<uint32_t, uint8_t> p = Q2.front();
+                Q2.pop();
+                uint32_t v = p.first;
+                uint8_t r = p.second;
+                uint16_t query_d;
+
+                // if (r < max_pruned_r[v]) {
+                //     continue;
+                // } else if
+                if (query_while_indexing_vertex_V9(u, v, curr_d, r, u_label)) {
+                    continue;
+                }
+                else {
+                    if (updated[v] & 1) {
+                        offset[v].back() = offset[v].back() + 1;
+                        labeling_bit[v].push_back(((uint32_t) r << 16) | curr_d);
+                    }
+                    else {
+                        labeling_v[v].push_back(u);
+                        offset[v].push_back(offset[v].back() + 1);
+                        labeling_bit[v].push_back(((uint32_t) r << 16) | curr_d);
+                        updated[v] = 1;
+                    }
+                }
+                for (uint32_t idx = 0; idx < ndegree[v]; idx++) {
+                    uint32_t w = graph[v][idx];
+                    if (w <= u) {
+                        continue;
+                    }
+                    uint8_t new_r = min(r, (uint8_t)wlist[v][idx]);
+                    if (new_r <= visited_r[w]) {
+                        if (new_r != 0 || visited_r[w] != 0) {
+                            continue;
+                        }
+                    }
+                    visited_r[w] = new_r;
+                    if (this_visited_flag[w] & 1) {
+                        continue;
+                    }
+                    this_visited.push_back(w);
+                    this_visited_flag[w] = 1;
+                    visited_vertex.push_back(w);
+                }
+            }
+            for (auto it : this_visited) {
+                Q1.emplace(make_pair(it, visited_r[it]));
+                this_visited_flag[it] = 0;
+            }
+            curr_d++;
+        }
+    }
+    // reset flag vectors
+    for (auto w : visited_vertex) {
+        updated[w] = 0;
+        visited_r[w] = 0;
+    }
+}
+
+void WGraph::vertex_prioritized_indexing_V10(uint32_t u, boost::dynamic_bitset<>& updated, vector<uint8_t>& visited_r, boost::dynamic_bitset<>& this_visited_flag) {
+    vector<uint32_t> visited_vertex;
+    queue<pair<uint32_t, uint8_t>> Q1, Q2;
+    Q1.emplace(make_pair(u, INVALID_VALUE_8bit));
+    visited_r[u] = INVALID_VALUE_8bit;
+    visited_vertex.push_back(u);
+    uint16_t curr_d = 0;
+
+    vector<uint8_t> max_pruned_r = vector<uint8_t>(nsize, 0);
+
+    register vector<vector<pair<uint16_t, uint8_t>>> u_label = vector<vector<pair<uint16_t, uint8_t>>>(nsize, vector<pair<uint16_t, uint8_t>>());
+    for (uint32_t i = 0; i < labeling_v[u].size(); i++) {
+        uint32_t v = labeling_v[u][i];
+        for (uint32_t p = offset[u][i]; p < offset[u][i + 1]; p++) {
+            uint16_t d = labeling_dw[u][p].first;
+            uint8_t r = labeling_dw[u][p].second;
+            u_label[v].emplace_back(make_pair(d, r));
+        }
+    }
+    u_label[u].emplace_back(make_pair(0, INVALID_VALUE_8bit));
+
+    vector<vector<uint16_t>> new_label(nsize, vector<uint16_t>(max_w+1, INVALID_VALUE_16bit));
+    for (uint32_t v = 0; v < u_label.size(); v++) {
+        for (int i = max_w; i >= 0; i--) {
+            int idx = lower_bound(u_label[v].begin(), u_label[v].end(), make_pair(0,i), compare_w<pair<uint16_t, uint8_t>>) - u_label[v].begin();
+            if (idx != u_label[v].size()) {
+                new_label[v][i] = u_label[v][idx].first;
+            }
+        }
+    }
+
+    // cout << "u = " << u << ": " << "u_label = " << endl;
+    // for (auto u_label_v : u_label) {
+    //     cout << "[";
+    //     for (auto p : u_label_v) {
+    //         cout << "(" << p.first << "," << (int)p.second << "),";
+    //     }
+    //     cout << "]" << endl;
+    // }
+
+    // cout << "new_label = " << endl;
+    // for (auto new_label_v : new_label) {
+    //     cout << "[";
+    //     for (auto new_v : new_label_v) {
+    //         cout << new_v << ",";
+    //     }
+    //     cout << "]" << endl;
+    // }
+    // cout << endl;
+
+    while (!Q1.empty() || !Q2.empty()) {
+        if (!Q1.empty()) {
+            vector<uint32_t> this_visited;
+            while (!Q1.empty()) {
+                pair<uint32_t, uint8_t> p = Q1.front();
+                Q1.pop();
+                uint32_t v = p.first;
+                uint8_t r = p.second;
+                uint16_t query_d;
+
+                // if (r < max_pruned_r[v]) {
+                //     continue;
+                // } else if
+                if (query_while_indexing_vertex_V10(u, v, curr_d, r, new_label)) {
+                    continue;
+                }
+                else {
+                    if (updated[v] & 1) {
+                        offset[v].back() = offset[v].back() + 1;
+                        labeling_dw[v].push_back(make_pair(curr_d, r));
+                    }
+                    else {
+                        labeling_v[v].push_back(u);
+                        offset[v].push_back(offset[v].back() + 1);
+                        labeling_dw[v].push_back(make_pair(curr_d, r));
+                        updated[v] = 1;
+                    }
+                }
+                for (uint32_t idx = 0; idx < ndegree[v]; idx++) {
+                    uint32_t w = graph[v][idx];
+                    if (w <= u) {
+                        continue;
+                    }
+                    uint8_t new_r = min(r, (uint8_t)wlist[v][idx]);
+                    if (new_r <= visited_r[w]) {
+                        if (new_r != 0 || visited_r[w] != 0) {
+                            continue;
+                        }
+                    }
+                    visited_r[w] = new_r;
+                    if (this_visited_flag[w] & 1) {
+                        continue;
+                    }
+                    this_visited.push_back(w);
+                    this_visited_flag[w] = 1;
+                    visited_vertex.push_back(w);
+                }
+            }
+            for (auto it : this_visited) {
+                Q2.emplace(make_pair(it, visited_r[it]));
+                this_visited_flag[it] = 0;
+            }
+            curr_d++;
+        }
+        else {
+            vector<uint32_t> this_visited;
+            while (!Q2.empty()) {
+                pair<uint32_t, uint8_t> p = Q2.front();
+                Q2.pop();
+                uint32_t v = p.first;
+                uint8_t r = p.second;
+                uint16_t query_d;
+
+                // if (r < max_pruned_r[v]) {
+                //     continue;
+                // } else if
+                if (query_while_indexing_vertex_V10(u, v, curr_d, r, new_label)) {
+                    continue;
+                }
+                else {
+                    if (updated[v] & 1) {
+                        offset[v].back() = offset[v].back() + 1;
+                        labeling_dw[v].push_back(make_pair(curr_d, r));
+                    }
+                    else {
+                        labeling_v[v].push_back(u);
+                        offset[v].push_back(offset[v].back() + 1);
+                        labeling_dw[v].push_back(make_pair(curr_d, r));
+                        updated[v] = 1;
+                    }
+                }
+                for (uint32_t idx = 0; idx < ndegree[v]; idx++) {
+                    uint32_t w = graph[v][idx];
+                    if (w <= u) {
+                        continue;
+                    }
+                    uint8_t new_r = min(r, (uint8_t)wlist[v][idx]);
+                    if (new_r <= visited_r[w]) {
+                        if (new_r != 0 || visited_r[w] != 0) {
+                            continue;
+                        }
+                    }
+                    visited_r[w] = new_r;
+                    if (this_visited_flag[w] & 1) {
+                        continue;
+                    }
+                    this_visited.push_back(w);
+                    this_visited_flag[w] = 1;
+                    visited_vertex.push_back(w);
+                }
+            }
+            for (auto it : this_visited) {
+                Q1.emplace(make_pair(it, visited_r[it]));
+                this_visited_flag[it] = 0;
+            }
+            curr_d++;
+        }
+    }
+    // reset flag vectors
+    for (auto w : visited_vertex) {
+        updated[w] = 0;
+        visited_r[w] = 0;
+    }
+}
+
 void WGraph::print_index() {
     for (uint32_t u = 0; u < nsize; u++) {
         cout << u << ": ";
         for (uint32_t i = 0; i < labeling_v[u].size(); i++) {
             for (uint32_t j = offset[u][i]; j < offset[u][i + 1]; j++) {
-                cout << "<" << labeling_v[u][i] << "," << labeling_dw[u][j].first << "," << labeling_dw[u][j].second << ">, ";
+                cout << "<" << labeling_v[u][i] << "," << (int)labeling_dw[u][j].first << "," << (int)labeling_dw[u][j].second << ">, ";
+            }
+        }
+        cout << endl;
+    }
+}
+
+void WGraph::print_index_2() {
+    for (uint32_t u = 0; u < nsize; u++) {
+        cout << u << ": ";
+        for (uint32_t i = 0; i < labeling_v[u].size(); i++) {
+            for (uint32_t j = offset[u][i]; j < offset[u][i + 1]; j++) {
+                cout << "<" << labeling_v[u][i] << "," << (uint16_t)labeling_bit[u][j] << "," << (labeling_bit[u][j] >> 16) << ">, ";
             }
         }
         cout << endl;
@@ -840,9 +1370,9 @@ void WGraph::check_minimality() {
     for (uint32_t u = 0; u < nsize; u++) {
         for (uint32_t wpos = 0; wpos < labeling_v[u].size(); wpos++) {
             for (uint32_t dpos = offset[u][wpos]; dpos < offset[u][wpos + 1]; dpos++) {
-                uint32_t d1 = query_skip(u, labeling_v[u][wpos], labeling_w[u][dpos], dpos);
-                if (d1 == labeling_d[u][dpos]) {
-                    cout << "failed at u, v, r, d: " << u << ", " << labeling_v[u][wpos] << ", " << labeling_w[u][dpos] << ", " << labeling_d[u][dpos] << endl;
+                uint32_t d1 = query_skip(u, labeling_v[u][wpos], labeling_dw[u][dpos].second, dpos);
+                if (d1 == labeling_dw[u][dpos].first) {
+                    cout << "failed at u, v, r, d: " << u << ", " << labeling_v[u][wpos] << ", " << labeling_dw[u][dpos].second << ", " << labeling_dw[u][dpos].first << endl;
                 }
             }
         }

@@ -39,6 +39,7 @@ public:
     vector<vector<uint16_t>> labeling_d;
     vector<vector<uint8_t>> labeling_w;
     vector<vector<pair<uint16_t, uint8_t>>> labeling_dw;
+    vector<vector<uint32_t>> labeling_bit;
 
     // tree decomposition
     vector<set<uint32_t>> hgraph;
@@ -57,6 +58,7 @@ public:
 
     //******************** index processing ************************//
     void print_index();
+    void print_index_2();
     void get_index_size();
     void check_minimality();
 
@@ -77,12 +79,18 @@ public:
     uint32_t query_skip(uint32_t, uint32_t, uint32_t, uint32_t);
 
     bool query_while_indexing_vertex_V1(uint32_t, uint32_t, uint16_t, uint8_t);
+    bool query_while_indexing_vertex_V2(uint32_t, uint32_t, uint16_t, uint8_t);
     bool query_while_indexing_vertex_V8(uint32_t, uint32_t, uint16_t, uint8_t, vector<vector<pair<uint16_t, uint8_t>>>&);
+    bool query_while_indexing_vertex_V9(uint32_t, uint32_t, uint16_t, uint8_t, vector<vector<uint32_t>>&);
+    bool query_while_indexing_vertex_V10(uint32_t, uint32_t, uint16_t, uint8_t, vector<vector<uint16_t>>&);
 
     //******************** index construction ************************//
     void build_index(string, int);
     void vertex_prioritized_indexing_V1(uint32_t, boost::dynamic_bitset<>&, vector<uint8_t>&, boost::dynamic_bitset<>&);
+    void vertex_prioritized_indexing_V2(uint32_t, boost::dynamic_bitset<>&, vector<uint8_t>&, boost::dynamic_bitset<>&);
     void vertex_prioritized_indexing_V8(uint32_t, boost::dynamic_bitset<>&, vector<uint8_t>&, boost::dynamic_bitset<>&);
+    void vertex_prioritized_indexing_V9(uint32_t, boost::dynamic_bitset<>&, vector<uint8_t>&, boost::dynamic_bitset<>&);
+    void vertex_prioritized_indexing_V10(uint32_t, boost::dynamic_bitset<>&, vector<uint8_t>&, boost::dynamic_bitset<>&);
 };
 #endif
 #pragma once

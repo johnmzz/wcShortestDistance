@@ -1,0 +1,135 @@
+Perform tree decomposition for the first 70% of verties.
+
+Start tree decomposition...
+
+decomposing vertex 5000, time: 0.455 s
+decomposing vertex 10000, time: 0.885 s
+decomposing vertex 15000, time: 1.375 s
+decomposing vertex 20000, time: 0.515 s
+decomposing vertex 25000, time: 2.845 s
+decomposing vertex 30000, time: 2.935 s
+decomposing vertex 35000, time: 2.895 s
+decomposing vertex 40000, time: 2.695 s
+decomposing vertex 45000, time: 5.04 s
+decomposing vertex 50000, time: 6.64 s
+decomposing vertex 55000, time: 30.835 s
+Finishing tree decomposition at count = 56389
+Constructing new graph...
+Finished tree decomposition, total time = 55.8784 s
+
+the number of vertices: 80555
+the number of edges: 10000054
+the number of weights: 6
+the maximum weight value: 5
+the maximum degree: 34864
+use V9 for first 10% vertices..., which is 8055
+0 vertices finished!
+this round took 0.106535 s
+2000 vertices finished!
+this round took 174.21 s
+4000 vertices finished!
+this round took 254.512 s
+6000 vertices finished!
+this round took 274.797 s
+8000 vertices finished!
+this round took 279.305 s
+10000 vertices finished!
+this round took 280.427 s
+12000 vertices finished!
+this round took 280.73 s
+14000 vertices finished!
+this round took 280.837 s
+16000 vertices finished!
+this round took 280.881 s
+18000 vertices finished!
+this round took 280.903 s
+20000 vertices finished!
+this round took 280.916 s
+22000 vertices finished!
+this round took 280.925 s
+24000 vertices finished!
+this round took 280.931 s
+26000 vertices finished!
+this round took 280.935 s
+28000 vertices finished!
+this round took 280.939 s
+30000 vertices finished!
+this round took 280.943 s
+32000 vertices finished!
+this round took 280.947 s
+34000 vertices finished!
+this round took 280.95 s
+36000 vertices finished!
+this round took 280.953 s
+38000 vertices finished!
+this round took 280.955 s
+40000 vertices finished!
+this round took 280.958 s
+42000 vertices finished!
+this round took 280.961 s
+44000 vertices finished!
+this round took 280.963 s
+46000 vertices finished!
+this round took 280.965 s
+48000 vertices finished!
+this round took 280.968 s
+50000 vertices finished!
+this round took 280.97 s
+52000 vertices finished!
+this round took 280.972 s
+54000 vertices finished!
+this round took 280.974 s
+56000 vertices finished!
+this round took 280.976 s
+58000 vertices finished!
+this round took 280.978 s
+60000 vertices finished!
+this round took 280.98 s
+62000 vertices finished!
+this round took 280.982 s
+64000 vertices finished!
+this round took 280.984 s
+66000 vertices finished!
+this round took 280.986 s
+68000 vertices finished!
+this round took 280.988 s
+70000 vertices finished!
+this round took 280.99 s
+72000 vertices finished!
+this round took 280.992 s
+74000 vertices finished!
+this round took 280.993 s
+76000 vertices finished!
+this round took 280.995 s
+78000 vertices finished!
+this round took 280.997 s
+80000 vertices finished!
+this round took 281.002 s
+build index: 281.004 s
+--------------Details of Index Occupation-------------
+labeling v, offset, labeling d, labeling w: 25807357, 25887912, 0
+total number of unsigned ints 32 in the index: 51695269, total number of unsigned int 16+8: 0
+Complete!
+	Command being timed: "timeout 50h ./wcsd_tree_decomp_partial movielens_10m_degree V9 10 1"
+	User time (seconds): 340.96
+	System time (seconds): 1.34
+	Percent of CPU this job got: 97%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 5:49.94
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 2391084
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 598416
+	Voluntary context switches: 143
+	Involuntary context switches: 401
+	Swaps: 0
+	File system inputs: 313136
+	File system outputs: 96
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
