@@ -1,6 +1,6 @@
 import os
 
-graphs=["movielens_10m", "eu-2005","eswiki-2013","uk-2007","movielens_25m","frwiki"]
+graphs=["eu-2005","eswiki-2013","uk-2007","frwiki"]
 types=["V9"]
 thresholds = ["10"]
 result_path = "./result_social_tree/"

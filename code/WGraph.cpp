@@ -1165,7 +1165,7 @@ void WGraph::vertex_prioritized_indexing_V9(uint32_t u, boost::dynamic_bitset<>&
 
 void WGraph::vertex_prioritized_indexing_V10(uint32_t u, boost::dynamic_bitset<>& updated, vector<uint8_t>& visited_r, boost::dynamic_bitset<>& this_visited_flag) {
     vector<uint32_t> visited_vertex;
-    queue<pair<uint32_t, uint8_t>> Q1, Q2;
+    queue<pair<uint32_t, uint8_t>> Q1;
     Q1.emplace(make_pair(u, INVALID_VALUE_8bit));
     visited_r[u] = INVALID_VALUE_8bit;
     visited_vertex.push_back(u);
@@ -1213,65 +1213,13 @@ void WGraph::vertex_prioritized_indexing_V10(uint32_t u, boost::dynamic_bitset<>
     // }
     // cout << endl;
 
-    while (!Q1.empty() || !Q2.empty()) {
-        if (!Q1.empty()) {
+    while (!Q1.empty()) {
+        uint32_t q_size = Q1.size();
+        for (uint32_t i = 0; i < q_size; i++) {
             vector<uint32_t> this_visited;
             while (!Q1.empty()) {
                 pair<uint32_t, uint8_t> p = Q1.front();
                 Q1.pop();
-                uint32_t v = p.first;
-                uint8_t r = p.second;
-                uint16_t query_d;
-
-                // if (r < max_pruned_r[v]) {
-                //     continue;
-                // } else if
-                if (query_while_indexing_vertex_V10(u, v, curr_d, r, new_label)) {
-                    continue;
-                }
-                else {
-                    if (updated[v] & 1) {
-                        offset[v].back() = offset[v].back() + 1;
-                        labeling_dw[v].push_back(make_pair(curr_d, r));
-                    }
-                    else {
-                        labeling_v[v].push_back(u);
-                        offset[v].push_back(offset[v].back() + 1);
-                        labeling_dw[v].push_back(make_pair(curr_d, r));
-                        updated[v] = 1;
-                    }
-                }
-                for (uint32_t idx = 0; idx < ndegree[v]; idx++) {
-                    uint32_t w = graph[v][idx];
-                    if (w <= u) {
-                        continue;
-                    }
-                    uint8_t new_r = min(r, (uint8_t)wlist[v][idx]);
-                    if (new_r <= visited_r[w]) {
-                        if (new_r != 0 || visited_r[w] != 0) {
-                            continue;
-                        }
-                    }
-                    visited_r[w] = new_r;
-                    if (this_visited_flag[w] & 1) {
-                        continue;
-                    }
-                    this_visited.push_back(w);
-                    this_visited_flag[w] = 1;
-                    visited_vertex.push_back(w);
-                }
-            }
-            for (auto it : this_visited) {
-                Q2.emplace(make_pair(it, visited_r[it]));
-                this_visited_flag[it] = 0;
-            }
-            curr_d++;
-        }
-        else {
-            vector<uint32_t> this_visited;
-            while (!Q2.empty()) {
-                pair<uint32_t, uint8_t> p = Q2.front();
-                Q2.pop();
                 uint32_t v = p.first;
                 uint8_t r = p.second;
                 uint16_t query_d;
